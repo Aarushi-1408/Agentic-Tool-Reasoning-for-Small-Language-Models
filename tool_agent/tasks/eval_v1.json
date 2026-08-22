@@ -1,0 +1,547 @@
+[
+  {
+    "id": "notool_001",
+    "category": "no_tool",
+    "difficulty": "easy",
+    "prompt": "What is the capital of Japan?",
+    "expected_answer": "Tokyo",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_002",
+    "category": "no_tool",
+    "difficulty": "easy",
+    "prompt": "Who painted the Mona Lisa?",
+    "expected_answer": "Leonardo da Vinci",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_003",
+    "category": "no_tool",
+    "difficulty": "easy",
+    "prompt": "What chemical element has the symbol 'O'?",
+    "expected_answer": "Oxygen",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_004",
+    "category": "no_tool",
+    "difficulty": "easy",
+    "prompt": "How many days are in a leap year?",
+    "expected_answer": "366",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_005",
+    "category": "no_tool",
+    "difficulty": "medium",
+    "prompt": "Explain the concept of gravity in one sentence.",
+    "expected_answer": "gravity",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_006",
+    "category": "no_tool",
+    "difficulty": "medium",
+    "prompt": "What is the largest planet in our solar system?",
+    "expected_answer": "Jupiter",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_007",
+    "category": "no_tool",
+    "difficulty": "easy",
+    "prompt": "What is 2 + 2?",
+    "expected_answer": "4",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_008",
+    "category": "no_tool",
+    "difficulty": "easy",
+    "prompt": "Name the primary color formed by mixing red and yellow.",
+    "expected_answer": "Orange",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_009",
+    "category": "no_tool",
+    "difficulty": "medium",
+    "prompt": "In what year did World War II end?",
+    "expected_answer": "1945",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_010",
+    "category": "no_tool",
+    "difficulty": "easy",
+    "prompt": "What is the boiling point of water in Celsius?",
+    "expected_answer": "100",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_011",
+    "category": "no_tool",
+    "difficulty": "medium",
+    "prompt": "What continent is Brazil located in?",
+    "expected_answer": "South America",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+  {
+    "id": "notool_012",
+    "category": "no_tool",
+    "difficulty": "medium",
+    "prompt": "What programming language uses .py file extension?",
+    "expected_answer": "Python",
+    "requires_tool": false,
+    "expected_behavior": { "allowed_tools": [], "expected_steps": 1 }
+  },
+
+  {
+    "id": "single_001",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Calculate 25 * 37.",
+    "expected_answer": "925",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_002",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "What is (150 + 250) / 5?",
+    "expected_answer": "80",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_003",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Echo the message 'Hello Research World'.",
+    "expected_answer": "Hello Research World",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["echo"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_004",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Look up the atomic number of gold.",
+    "expected_answer": "79",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_005",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Look up the population of Tokyo.",
+    "expected_answer": "14000000",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_006",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Reverse the text string 'Antigravity'.",
+    "expected_answer": "ytivargitnA",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["string_manipulator"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_007",
+    "category": "single_tool",
+    "difficulty": "medium",
+    "prompt": "Calculate 144 / 12 + 89 * 3.",
+    "expected_answer": "279",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_008",
+    "category": "single_tool",
+    "difficulty": "medium",
+    "prompt": "Convert the phrase 'artificial intelligence' to uppercase.",
+    "expected_answer": "ARTIFICIAL INTELLIGENCE",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["string_manipulator"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_009",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Calculate 2 ** 10.",
+    "expected_answer": "1024",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_010",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Look up the distance from Paris to Berlin in km.",
+    "expected_answer": "1050",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_011",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Calculate 999 - 456.",
+    "expected_answer": "543",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_012",
+    "category": "single_tool",
+    "difficulty": "medium",
+    "prompt": "What is the length of the text 'Benchmark Evaluation Framework'?",
+    "expected_answer": "30",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["string_manipulator"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_013",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Look up the price of an apple.",
+    "expected_answer": "5",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_014",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Calculate 73 * 18.",
+    "expected_answer": "1314",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 2 }
+  },
+  {
+    "id": "single_015",
+    "category": "single_tool",
+    "difficulty": "easy",
+    "prompt": "Echo the string 'Verification Complete'.",
+    "expected_answer": "Verification Complete",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["echo"], "expected_steps": 2 }
+  },
+
+  {
+    "id": "twostep_001",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Calculate 50 * 4, then calculate the previous result divided by 5.",
+    "expected_answer": "40",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_002",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Look up the price of an apple and the price of an orange, then calculate the total cost for both.",
+    "expected_answer": "13",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_003",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Look up gold_atomic_number, then multiply it by 10.",
+    "expected_answer": "790",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_004",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Calculate 15 + 25, then reverse the resulting number string.",
+    "expected_answer": "04",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator", "string_manipulator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_005",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Echo the text 'System Ready', then find the length of that echoed text.",
+    "expected_answer": "18",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["echo", "string_manipulator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_006",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Calculate 12 * 12, then add 56 to the result.",
+    "expected_answer": "200",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_007",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Look up usd_to_eur exchange rate, then calculate 100 * that rate.",
+    "expected_answer": "92",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_008",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Convert 'hello world' to uppercase, then reverse the uppercase result.",
+    "expected_answer": "DLROW OLLEH",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["string_manipulator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_009",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Calculate 500 / 2, then subtract 50 from it.",
+    "expected_answer": "200",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_010",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Look up paris_berlin_distance_km, then divide that distance by 2.",
+    "expected_answer": "525",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_011",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Calculate 8 * 8, then echo the result message.",
+    "expected_answer": "64",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator", "echo"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_012",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Look up apple_price, then calculate 10 * apple_price.",
+    "expected_answer": "50",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_013",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Reverse 'data', then convert the reversed text to uppercase.",
+    "expected_answer": "ATAD",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["string_manipulator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_014",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Calculate 300 + 400, then divide by 7.",
+    "expected_answer": "100",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 3 }
+  },
+  {
+    "id": "twostep_015",
+    "category": "two_step",
+    "difficulty": "medium",
+    "prompt": "Look up speed_of_light_km_s, then divide it by 1000.",
+    "expected_answer": "300",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator"], "expected_steps": 3 }
+  },
+
+  {
+    "id": "multistep_001",
+    "category": "multi_step",
+    "difficulty": "hard",
+    "prompt": "Look up apple_price and orange_price. Calculate 3 * apple_price + 2 * orange_price, then echo the total.",
+    "expected_answer": "31",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator", "echo"], "expected_steps": 4 }
+  },
+  {
+    "id": "multistep_002",
+    "category": "multi_step",
+    "difficulty": "hard",
+    "prompt": "Calculate 10 + 20, then multiply by 3, then subtract 5, then echo the final number.",
+    "expected_answer": "85",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator", "echo"], "expected_steps": 4 }
+  },
+  {
+    "id": "multistep_003",
+    "category": "multi_step",
+    "difficulty": "hard",
+    "prompt": "Look up gold_atomic_number, multiply it by 2, add 42, then reverse the result string.",
+    "expected_answer": "002",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator", "string_manipulator"], "expected_steps": 4 }
+  },
+  {
+    "id": "multistep_004",
+    "category": "multi_step",
+    "difficulty": "hard",
+    "prompt": "Look up paris_berlin_distance_km, divide by 5, add 90, then calculate the square (power of 2) of the result.",
+    "expected_answer": "90000",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator"], "expected_steps": 4 }
+  },
+  {
+    "id": "multistep_005",
+    "category": "multi_step",
+    "difficulty": "hard",
+    "prompt": "Convert 'agent' to uppercase, reverse it, look up string length of the result, then multiply length by 100.",
+    "expected_answer": "500",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["string_manipulator", "calculator"], "expected_steps": 4 }
+  },
+  {
+    "id": "multistep_006",
+    "category": "multi_step",
+    "difficulty": "hard",
+    "prompt": "Calculate 5 * 5, multiply by 4, divide by 2, then add 15.",
+    "expected_answer": "65",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 4 }
+  },
+  {
+    "id": "multistep_007",
+    "category": "multi_step",
+    "difficulty": "hard",
+    "prompt": "Look up tokyo_population, divide by 1000000, multiply by 5, then subtract 10.",
+    "expected_answer": "60",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator"], "expected_steps": 4 }
+  },
+  {
+    "id": "multistep_008",
+    "category": "multi_step",
+    "difficulty": "hard",
+    "prompt": "Look up moon_distance_km, subtract 84400, divide by 3000, then echo the result.",
+    "expected_answer": "100",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup", "calculator", "echo"], "expected_steps": 4 }
+  },
+  {
+    "id": "multistep_009",
+    "category": "multi_step",
+    "difficulty": "hard",
+    "prompt": "Reverse 'model', uppercase it, echo the string, then find its character length.",
+    "expected_answer": "5",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["string_manipulator", "echo"], "expected_steps": 4 }
+  },
+
+  {
+    "id": "select_001",
+    "category": "tool_selection",
+    "difficulty": "medium",
+    "prompt": "Find the length of the string 'Qwen3-1.7B-Agent'.",
+    "expected_answer": "16",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["string_manipulator"], "expected_steps": 2 }
+  },
+  {
+    "id": "select_002",
+    "category": "tool_selection",
+    "difficulty": "medium",
+    "prompt": "Determine the atomic number of gold.",
+    "expected_answer": "79",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup"], "expected_steps": 2 }
+  },
+  {
+    "id": "select_003",
+    "category": "tool_selection",
+    "difficulty": "medium",
+    "prompt": "Reverse the order of characters in 'harness'.",
+    "expected_answer": "ssenrah",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["string_manipulator"], "expected_steps": 2 }
+  },
+  {
+    "id": "select_004",
+    "category": "tool_selection",
+    "difficulty": "medium",
+    "prompt": "What is 4096 / 64?",
+    "expected_answer": "64",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 2 }
+  },
+  {
+    "id": "select_005",
+    "category": "tool_selection",
+    "difficulty": "medium",
+    "prompt": "Echo 'Execution Pipeline Test'.",
+    "expected_answer": "Execution Pipeline Test",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["echo"], "expected_steps": 2 }
+  },
+  {
+    "id": "select_006",
+    "category": "tool_selection",
+    "difficulty": "medium",
+    "prompt": "Look up the speed of light in km/s.",
+    "expected_answer": "300000",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup"], "expected_steps": 2 }
+  },
+
+  {
+    "id": "errrec_001",
+    "category": "error_recovery",
+    "difficulty": "hard",
+    "prompt": "Evaluate expression '25 * * 4'. If that fails with an error, evaluate '25 * 4' instead.",
+    "expected_answer": "100",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["calculator"], "expected_steps": 3 }
+  },
+  {
+    "id": "errrec_002",
+    "category": "error_recovery",
+    "difficulty": "hard",
+    "prompt": "Look up key 'nonexistent_key'. If that produces a lookup error, look up key 'gold_atomic_number' instead.",
+    "expected_answer": "79",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["lookup"], "expected_steps": 3 }
+  },
+  {
+    "id": "errrec_003",
+    "category": "error_recovery",
+    "difficulty": "hard",
+    "prompt": "Run string_manipulator operation 'rot13' on text 'hello'. If that operation is invalid, run operation 'uppercase' on 'hello' instead.",
+    "expected_answer": "HELLO",
+    "requires_tool": true,
+    "expected_behavior": { "allowed_tools": ["string_manipulator"], "expected_steps": 3 }
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "calculator_001",
+    "prompt": "Calculate 25 * 37.",
+    "expected_answer": "925",
+    "requires_tool": true
+  },
+  {
+    "id": "calculator_002",
+    "prompt": "What is (150 + 250) / 5?",
+    "expected_answer": "80",
+    "requires_tool": true
+  },
+  {
+    "id": "no_tool_001",
+    "prompt": "What is the capital of France?",
+    "expected_answer": "Paris",
+    "requires_tool": false
+  },
+  {
+    "id": "no_tool_002",
+    "prompt": "Who wrote 'Romeo and Juliet'?",
+    "expected_answer": "Shakespeare",
+    "requires_tool": false
+  },
+  {
+    "id": "echo_001",
+    "prompt": "Echo the string 'Hello Research World'.",
+    "expected_answer": "Echo: Hello Research World",
+    "requires_tool": true
+  }
+]

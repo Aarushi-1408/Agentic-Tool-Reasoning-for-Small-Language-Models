@@ -1,0 +1,76 @@
+{
+  "summary": {
+    "total_tasks": 5,
+    "successful_tasks": 1,
+    "accuracy": 0.2,
+    "tool_required_accuracy": 0.3333333333333333,
+    "no_tool_accuracy": 0.0,
+    "avg_steps_per_task": 1.2,
+    "valid_tool_call_rate": 1.0,
+    "termination_reasons": {
+      "final_answer": 5
+    }
+  },
+  "task_results": [
+    {
+      "task_id": "calculator_001",
+      "prompt": "Calculate 25 * 37.",
+      "expected_answer": "925",
+      "requires_tool": true,
+      "actual_answer": "The answer is 925.",
+      "task_success": true,
+      "total_steps": 2,
+      "num_tool_calls": 1,
+      "tool_call_validity": 1.0,
+      "termination_reason": "final_answer"
+    },
+    {
+      "task_id": "calculator_002",
+      "prompt": "What is (150 + 250) / 5?",
+      "expected_answer": "80",
+      "requires_tool": true,
+      "actual_answer": "Mock answer for task: 'What is (150 + 250) / 5?'",
+      "task_success": false,
+      "total_steps": 1,
+      "num_tool_calls": 0,
+      "tool_call_validity": 1.0,
+      "termination_reason": "final_answer"
+    },
+    {
+      "task_id": "no_tool_001",
+      "prompt": "What is the capital of France?",
+      "expected_answer": "Paris",
+      "requires_tool": false,
+      "actual_answer": "Mock answer for task: 'What is the capital of France?'",
+      "task_success": false,
+      "total_steps": 1,
+      "num_tool_calls": 0,
+      "tool_call_validity": 1.0,
+      "termination_reason": "final_answer"
+    },
+    {
+      "task_id": "no_tool_002",
+      "prompt": "Who wrote 'Romeo and Juliet'?",
+      "expected_answer": "Shakespeare",
+      "requires_tool": false,
+      "actual_answer": "Mock answer for task: 'Who wrote 'Romeo and Juliet'?'",
+      "task_success": false,
+      "total_steps": 1,
+      "num_tool_calls": 0,
+      "tool_call_validity": 1.0,
+      "termination_reason": "final_answer"
+    },
+    {
+      "task_id": "echo_001",
+      "prompt": "Echo the string 'Hello Research World'.",
+      "expected_answer": "Echo: Hello Research World",
+      "requires_tool": true,
+      "actual_answer": "Mock answer for task: 'Echo the string 'Hello Research World'.'",
+      "task_success": false,
+      "total_steps": 1,
+      "num_tool_calls": 0,
+      "tool_call_validity": 1.0,
+      "termination_reason": "final_answer"
+    }
+  ]
+}

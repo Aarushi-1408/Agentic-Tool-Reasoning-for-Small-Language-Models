@@ -1,0 +1,9 @@
+model:
+  name: Qwen/Qwen3-1.7B
+  device: auto
+  dtype: auto
+  max_new_tokens: 512
+  temperature: 0.0
+
+agent:
+  max_steps: 10

@@ -1,0 +1,25 @@
+{"task_id": "train_001", "category": "no_tool", "prompt": "What is the capital of Japan?"}
+{"task_id": "train_002", "category": "no_tool", "prompt": "Explain the difference between a list and a tuple in Python."}
+{"task_id": "train_003", "category": "no_tool", "prompt": "Who wrote the play 'Hamlet'?"}
+{"task_id": "train_004", "category": "single_tool", "prompt": "Calculate 144 / 12."}
+{"task_id": "train_005", "category": "single_tool", "prompt": "Find the atomic number of gold using the lookup tool with key 'gold_atomic_number'."}
+{"task_id": "train_006", "category": "single_tool", "prompt": "Reverse the string 'Antigravity'."}
+{"task_id": "train_007", "category": "single_tool", "prompt": "Echo the string 'Hello World'."}
+{"task_id": "train_008", "category": "tool_selection", "prompt": "What is the population of Tokyo? Look it up in the database."}
+{"task_id": "train_009", "category": "tool_selection", "prompt": "Find the length of the string 'Supercalifragilisticexpialidocious'."}
+{"task_id": "train_010", "category": "tool_selection", "prompt": "How many kilometers is the distance from Paris to Berlin?"}
+{"task_id": "train_011", "category": "two_step", "prompt": "Find the price of an apple ('apple_price') and an orange ('orange_price') from the database, then calculate their total cost."}
+{"task_id": "train_012", "category": "two_step", "prompt": "Look up 'speed_of_light_km_s' and 'moon_distance_km', then calculate how many seconds light takes to travel from the moon to Earth (moon_distance_km / speed_of_light_km_s)."}
+{"task_id": "train_013", "category": "two_step", "prompt": "Convert the string 'machine learning' to uppercase and then echo the resulting string."}
+{"task_id": "train_014", "category": "multi_step", "prompt": "Look up 'apple_price' and 'orange_price', calculate their sum, then reverse the digits of that sum string."}
+{"task_id": "train_015", "category": "multi_step", "prompt": "Look up the atomic number of gold ('gold_atomic_number') and multiply it by 10 using the calculator, then echo the final calculated value."}
+{"task_id": "train_016", "category": "multi_step", "prompt": "Find the distance 'paris_berlin_distance_km', divide it by 10, and reverse the resulting number string."}
+{"task_id": "train_017", "category": "tool_result_interpretation", "prompt": "Look up 'tokyo_population' and state whether it is greater than 10,000,000."}
+{"task_id": "train_018", "category": "tool_result_interpretation", "prompt": "Calculate (50 * 4) - 25 and state if the result is an even or odd number."}
+{"task_id": "train_019", "category": "tool_result_interpretation", "prompt": "Check the length of the text 'Artificial Intelligence' using string_manipulator and state whether it has more than 15 characters."}
+{"task_id": "train_020", "category": "error_recovery", "prompt": "Look up 'mars_distance_km' in the reference database. If that key is missing, look up 'moon_distance_km' instead and report its value."}
+{"task_id": "train_021", "category": "error_recovery", "prompt": "Evaluate expression '25 * 37 + bad_var'. If evaluation fails with an error, evaluate '25 * 37' instead and return the result."}
+{"task_id": "train_022", "category": "error_recovery", "prompt": "Try calling tool 'db_search' with key 'apple_price'. If 'db_search' is an unknown tool, call 'lookup' with key 'apple_price' instead."}
+{"task_id": "train_023", "category": "error_recovery", "prompt": "Try calculating expression with non-string argument expression=500. Upon receiving invalid argument error, fix the argument to string expression='500 / 20' and report the result."}
+{"task_id": "train_024", "category": "multi_step", "prompt": "Look up 'apple_price', 'orange_price', and 'usd_to_eur'. Calculate (apple_price + orange_price) * usd_to_eur, and reverse the resulting number string."}
+{"task_id": "train_025", "category": "no_tool", "prompt": "What is the speed of sound in dry air at 20 degrees Celsius approximately?"}

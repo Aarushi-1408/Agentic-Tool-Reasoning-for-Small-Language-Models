@@ -30,15 +30,22 @@ def load_tasks(filepath: str) -> List[Dict[str, Any]]:
     Load tasks from a JSON or JSONL file.
     """
     tasks = []
-    if not os.path.exists(filepath):
-        raise FileNotFoundError(f"Tasks file not found at: '{filepath}'")
+    resolved_path = filepath
+    if not os.path.exists(resolved_path):
+        # Fallback check relative to project root (tool_agent/)
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        alt_path = os.path.join(project_root, filepath)
+        if os.path.exists(alt_path):
+            resolved_path = alt_path
+        else:
+            raise FileNotFoundError(f"Tasks file not found at: '{filepath}' (also checked: '{alt_path}')")
 
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(resolved_path, "r", encoding="utf-8") as f:
         content = f.read().strip()
         if not content:
             return tasks
 
-        if filepath.endswith(".jsonl") or not content.startswith("["):
+        if resolved_path.endswith(".jsonl") or not content.startswith("["):
             for line in content.splitlines():
                 line = line.strip()
                 if line:

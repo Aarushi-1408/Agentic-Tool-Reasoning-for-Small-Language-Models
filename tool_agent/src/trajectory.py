@@ -44,18 +44,25 @@ class Trajectory:
     steps: List[TrajectoryStep] = field(default_factory=list)
     final_answer: Optional[str] = None
     termination_reason: str = "running"  # "final_answer", "max_steps_exceeded", "error"
+    trajectory_id: Optional[str] = None
+    teacher_model: Optional[str] = None
+    success: Optional[bool] = None
 
     def add_step(self, step: TrajectoryStep) -> None:
         self.steps.append(step)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            "trajectory_id": self.trajectory_id or f"traj_{self.task_id}",
             "task_id": self.task_id,
+            "task": self.prompt,
             "prompt": self.prompt,
+            "teacher_model": self.teacher_model or "unknown",
             "messages": self.messages,
             "steps": [step.to_dict() for step in self.steps],
             "final_answer": self.final_answer,
             "termination_reason": self.termination_reason,
+            "success": self.success if self.success is not None else (self.termination_reason == "final_answer"),
         }
 
     def to_json(self, indent: int = 2) -> str:

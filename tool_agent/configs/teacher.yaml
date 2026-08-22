@@ -1,0 +1,10 @@
+teacher:
+  backend: transformers
+  model_name: Qwen/Qwen3-8B
+  device: auto
+  dtype: bfloat16
+  max_new_tokens: 1024
+  temperature: 0.0
+
+agent:
+  max_steps: 8

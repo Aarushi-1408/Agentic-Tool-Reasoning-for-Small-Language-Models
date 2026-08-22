@@ -1,0 +1,18 @@
+{
+  "teacher_model": "Qwen/Qwen3-8B",
+  "backend": "mock",
+  "total_tasks": 25,
+  "successful_trajectories": 25,
+  "failed_trajectories": 0,
+  "valid_trajectories": 25,
+  "invalid_trajectories": 0,
+  "no_tool_trajectories": 4,
+  "single_tool_trajectories": 11,
+  "multi_step_trajectories": 10,
+  "average_steps_per_task": 2.56,
+  "total_tool_calls": 39,
+  "tool_call_failures": 4,
+  "max_steps_exceeded_terminations": 0,
+  "total_generation_time_seconds": 0.08,
+  "average_time_per_task_seconds": 0.0
+}

@@ -1,0 +1,19 @@
+{
+  "raw_trajectories": 25,
+  "valid_trajectories": 21,
+  "rejected_trajectories": 4,
+  "acceptance_rate": 0.84,
+  "categories": {
+    "no_tool": 4,
+    "single_tool": 11,
+    "two_step": 1,
+    "multi_step": 5
+  },
+  "average_messages_per_example": 4.95,
+  "average_tool_calls_per_example": 1.48,
+  "rejection_reasons": {
+    "missing_tool_result": 2,
+    "invalid_tool": 1,
+    "invalid_arguments": 1
+  }
+}

@@ -70,9 +70,12 @@ class SFTConverter:
         if not isinstance(steps, list) or len(steps) == 0:
             return False, "incomplete_trajectory"
 
-        has_final_step = False
-        expected_step = 0
+        has_final_step = any(
+            isinstance(s, dict) and s.get("action_type") == "final"
+            for s in steps
+        )
 
+        expected_step = 0
         for step in steps:
             if not isinstance(step, dict):
                 return False, "malformed_json"
@@ -89,32 +92,32 @@ class SFTConverter:
             if action_type == "parse_error":
                 return False, "malformed_json"
 
-            if action_type == "final":
-                has_final_step = True
-
             if action_type == "tool_call":
                 tool_name = step.get("tool_name")
                 arguments = step.get("arguments")
                 tool_result = step.get("tool_result")
 
-                if not tool_name or not isinstance(tool_name, str) or tool_name not in self.registered_tool_names:
+                is_error_recovery = record.get("category") == "error_recovery"
+
+                if not tool_name or not isinstance(tool_name, str):
+                    return False, "invalid_tool"
+                if not is_error_recovery and tool_name not in self.registered_tool_names:
                     return False, "invalid_tool"
 
                 if arguments is None or not isinstance(arguments, dict):
                     return False, "invalid_arguments"
 
-                # Validate argument schema
-                tool_obj = self.tool_registry.get(tool_name)
-                if tool_obj:
-                    is_valid_arg, _ = validate_arguments(tool_obj.parameters, arguments)
-                    if not is_valid_arg:
-                        return False, "invalid_arguments"
+                if not is_error_recovery:
+                    tool_obj = self.tool_registry.get(tool_name)
+                    if tool_obj:
+                        is_valid_arg, _ = validate_arguments(tool_obj.parameters, arguments)
+                        if not is_valid_arg:
+                            return False, "invalid_arguments"
 
                 if tool_result is None or str(tool_result).strip() == "":
                     return False, "missing_tool_result"
 
-                if step.get("error") is not None:
-                    # Trajectory contains an unrecovered tool error
+                if step.get("error") is not None and not is_error_recovery:
                     return False, "missing_tool_result"
 
         if not has_final_step:
@@ -172,7 +175,10 @@ class SFTConverter:
         steps = record.get("steps", [])
         tool_calls_count = sum(1 for s in steps if s.get("action_type") == "tool_call")
 
-        if tool_calls_count == 0:
+        rec_cat = record.get("category")
+        if rec_cat and isinstance(rec_cat, str):
+            category = rec_cat
+        elif tool_calls_count == 0:
             category = "no_tool"
         elif tool_calls_count == 1:
             category = "single_tool"
@@ -221,11 +227,12 @@ class SFTConverter:
         accepted_records = []
         rejected_records = []
 
-        category_counts = {
+        category_counts: Dict[str, int] = {
             "no_tool": 0,
             "single_tool": 0,
             "two_step": 0,
             "multi_step": 0,
+            "error_recovery": 0,
         }
         rejection_reasons: Dict[str, int] = {}
         total_messages = 0
@@ -244,7 +251,7 @@ class SFTConverter:
 
                     if sft_record is not None:
                         accepted_records.append(sft_record)
-                        category_counts[category] += 1
+                        category_counts[category] = category_counts.get(category, 0) + 1
                         total_messages += len(sft_record["messages"])
 
                         # Count tool calls

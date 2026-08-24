@@ -68,10 +68,8 @@ def main():
     print(f"Rejected trajectories  : {stats['rejected_trajectories']}")
     print(f"Acceptance Rate        : {stats['acceptance_rate'] * 100:.2f}%")
     print(f"\nCategory Breakdown:")
-    print(f"  No-tool              : {stats['categories']['no_tool']}")
-    print(f"  Single-tool          : {stats['categories']['single_tool']}")
-    print(f"  Two-step             : {stats['categories']['two_step']}")
-    print(f"  Multi-step           : {stats['categories']['multi_step']}")
+    for cat_name, cat_cnt in stats['categories'].items():
+        print(f"  {cat_name:<20}: {cat_cnt}")
     print(f"\nAverages:")
     print(f"  Avg messages/example : {stats['average_messages_per_example']}")
     print(f"  Avg tool calls/ex.   : {stats['average_tool_calls_per_example']}")

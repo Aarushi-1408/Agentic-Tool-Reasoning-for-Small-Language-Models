@@ -3,8 +3,9 @@
 CLI script to generate synthetic tool-use trajectories using a Teacher Model.
 
 Usage:
-  python scripts/generate_trajectories.py --backend mock --tasks data/tasks/train_tasks.jsonl --output data/raw/teacher_trajectories.jsonl
-  python scripts/generate_trajectories.py --teacher-model Qwen/Qwen3-8B --config configs/teacher.yaml
+  python scripts/generate_trajectories.py --backend mock \
+      --num-no-tool 20 --num-single-tool 25 --num-two-step 25 --num-multi-step 20 --num-error-recovery 10 \
+      --seed 42 --output data/raw/teacher_trajectories_v2_100.jsonl
 """
 
 import sys
@@ -20,8 +21,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from src.tools import ToolRegistry
 from src.harness import AgentHarness
-from src.generation.teacher import create_teacher, TeacherInterface, MockTeacher
+from src.generation.teacher import create_teacher, TeacherInterface
 from src.generation.validator import TrajectoryValidator
+from src.generation.task_generator import TaskGenerator
 from tools.example_tools import CalculatorTool, EchoTool, LookupTool, StringManipulatorTool
 
 
@@ -32,7 +34,6 @@ def load_tasks(filepath: str) -> List[Dict[str, Any]]:
     tasks = []
     resolved_path = filepath
     if not os.path.exists(resolved_path):
-        # Fallback check relative to project root (tool_agent/)
         project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
         alt_path = os.path.join(project_root, filepath)
         if os.path.exists(alt_path):
@@ -61,12 +62,28 @@ def main():
     parser.add_argument("--teacher-model", type=str, default=None, help="Teacher model name or path (e.g. Qwen/Qwen3-8B)")
     parser.add_argument("--backend", type=str, default=None, help="Teacher backend: transformers, api, or mock")
     parser.add_argument("--config", type=str, default="configs/teacher.yaml", help="Path to teacher config YAML")
-    parser.add_argument("--tasks", type=str, default="data/tasks/train_tasks.jsonl", help="Path to training tasks JSONL")
-    parser.add_argument("--output", type=str, default="data/raw/teacher_trajectories.jsonl", help="Output path for teacher trajectories JSONL")
-    parser.add_argument("--metrics-output", type=str, default="data/raw/generation_metrics.json", help="Output path for generation metrics JSON")
+    parser.add_argument("--tasks", type=str, default=None, help="Optional existing tasks file (overrides generation)")
+    parser.add_argument("--tasks-output", type=str, default="data/tasks/train_tasks_v2_100.jsonl", help="Output path for generated tasks JSONL")
+    parser.add_argument("--output", type=str, default="data/raw/teacher_trajectories_v2_100.jsonl", help="Output path for teacher trajectories JSONL")
+    parser.add_argument("--rejected-output", type=str, default="data/raw/rejected_v2_100.jsonl", help="Output path for rejected trajectories JSONL")
+    parser.add_argument("--metrics-output", type=str, default="data/raw/generation_stats_v2_100.json", help="Output path for generation metrics JSON")
     parser.add_argument("--max-steps", type=int, default=None, help="Max execution steps per task")
-    parser.add_argument("--num-tasks", type=int, default=None, help="Number of tasks to generate")
+
+    # Category distribution arguments
+    parser.add_argument("--num-no-tool", type=int, default=20, help="Number of no-tool tasks")
+    parser.add_argument("--num-single-tool", type=int, default=25, help="Number of single-tool tasks")
+    parser.add_argument("--num-two-step", type=int, default=25, help="Number of two-step tasks")
+    parser.add_argument("--num-multi-step", type=int, default=20, help="Number of multi-step tasks")
+    parser.add_argument("--num-error-recovery", type=int, default=10, help="Number of error recovery tasks")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed for task generation")
+    parser.add_argument("--overwrite", action="store_true", help="Allow overwriting existing output files")
+
     args = parser.parse_args()
+
+    # 0. Safety Checks - Do NOT overwrite existing output files unless --overwrite is set
+    if os.path.exists(args.output) and not args.overwrite:
+        print(f"[ERROR] Output file '{args.output}' already exists. Use --overwrite to allow overwriting.")
+        sys.exit(1)
 
     # Load YAML configuration if exists
     config = {}
@@ -77,13 +94,11 @@ def main():
     teacher_cfg = config.get("teacher", {})
     agent_cfg = config.get("agent", {})
 
-    # Override config with CLI arguments if specified
     if args.teacher_model:
         teacher_cfg["model_name"] = args.teacher_model
     if args.backend:
         teacher_cfg["backend"] = args.backend
 
-    # Default backend fallback if not specified
     if "backend" not in teacher_cfg:
         if args.teacher_model and "mock" in args.teacher_model.lower():
             teacher_cfg["backend"] = "mock"
@@ -92,12 +107,40 @@ def main():
 
     max_steps = args.max_steps if args.max_steps is not None else agent_cfg.get("max_steps", 8)
 
-    # 1. Load tasks
+    # 1. Load or Generate tasks
     print(f"\n==================== GENERATION INITIALIZATION ====================")
-    print(f"Loading training tasks from: '{args.tasks}'")
-    tasks = load_tasks(args.tasks)
-    if args.num_tasks and args.num_tasks > 0:
-        tasks = tasks[:args.num_tasks]
+    if args.tasks:
+        print(f"Loading custom training tasks from: '{args.tasks}'")
+        tasks = load_tasks(args.tasks)
+    else:
+        print(f"Generating tasks with category distribution (Seed: {args.seed}):")
+        print(f"  No-tool       : {args.num_no_tool}")
+        print(f"  Single-tool   : {args.num_single_tool}")
+        print(f"  Two-step      : {args.num_two_step}")
+        print(f"  Multi-step    : {args.num_multi_step}")
+        print(f"  Error-recovery: {args.num_error_recovery}")
+
+        generator = TaskGenerator(seed=args.seed)
+        tasks = generator.generate_tasks(
+            num_no_tool=args.num_no_tool,
+            num_single_tool=args.num_single_tool,
+            num_two_step=args.num_two_step,
+            num_multi_step=args.num_multi_step,
+            num_error_recovery=args.num_error_recovery,
+            id_prefix="train_v2_",
+        )
+
+        # Save tasks to task output file
+        if os.path.exists(args.tasks_output) and not args.overwrite:
+            print(f"[ERROR] Tasks output file '{args.tasks_output}' already exists. Use --overwrite to allow overwriting.")
+            sys.exit(1)
+
+        os.makedirs(os.path.dirname(os.path.abspath(args.tasks_output)), exist_ok=True)
+        with open(args.tasks_output, "w", encoding="utf-8") as t_out:
+            for task in tasks:
+                t_out.write(json.dumps(task) + "\n")
+        print(f"Generated tasks saved to: '{args.tasks_output}'")
+
     print(f"Total tasks to execute: {len(tasks)}")
 
     # 2. Instantiate tools ONCE
@@ -123,119 +166,118 @@ def main():
     validator = TrajectoryValidator(registered_tools=set(registry.list_tool_names()))
 
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
+    if args.rejected_output:
+        os.makedirs(os.path.dirname(os.path.abspath(args.rejected_output)), exist_ok=True)
 
     total_tasks = len(tasks)
-    successful_count = 0
-    failed_count = 0
-    no_tool_count = 0
-    single_tool_count = 0
-    multi_step_count = 0
-    valid_count = 0
-    invalid_count = 0
+    valid_trajectories = []
+    rejected_trajectories = []
+    category_counts = {
+        "no_tool": 0,
+        "single_tool": 0,
+        "two_step": 0,
+        "multi_step": 0,
+        "error_recovery": 0,
+    }
+    rejection_reasons: Dict[str, int] = {}
     total_steps = 0
     total_tool_calls = 0
-    tool_failures = 0
-    max_steps_exceeded_count = 0
 
     start_time = time.time()
 
-    # Clear/open output file
-    with open(args.output, "w", encoding="utf-8") as out_f:
-        for idx, task_info in enumerate(tasks, 1):
-            task_id = task_info.get("task_id", f"train_{idx:03d}")
-            prompt = task_info.get("prompt", task_info.get("task", ""))
+    for idx, task_info in enumerate(tasks, 1):
+        raw_task_id = task_info.get("task_id", f"train_v2_{idx:03d}")
+        trajectory_id = f"traj_v2_{raw_task_id}"
+        prompt = task_info.get("prompt", task_info.get("task", ""))
+        category = task_info.get("category", "general")
 
-            print(f"[{idx}/{total_tasks}] Running task '{task_id}': \"{prompt[:60]}...\"")
-            
-            try:
-                trajectory = harness.run(prompt=prompt, task_id=task_id)
-                trajectory.teacher_model = teacher_info.get("teacher_model", "unknown")
-                trajectory_dict = trajectory.to_dict()
+        print(f"[{idx}/{total_tasks}] Running task '{raw_task_id}' ({category}): \"{prompt[:50]}...\"")
 
-                # Add extra fields if task has category metadata
-                if "category" in task_info:
-                    trajectory_dict["category"] = task_info["category"]
+        try:
+            trajectory = harness.run(prompt=prompt, task_id=raw_task_id)
+            trajectory.teacher_model = teacher_info.get("teacher_model", "unknown")
+            trajectory_dict = trajectory.to_dict()
+            trajectory_dict["trajectory_id"] = trajectory_id
+            trajectory_dict["category"] = category
 
-                # Validate trajectory
-                val_res = validator.validate(trajectory_dict, tool_registry=registry)
-                trajectory_dict["valid"] = val_res["valid"]
-                trajectory_dict["validation_errors"] = val_res["validation_errors"]
+            # Validate trajectory
+            val_res = validator.validate(trajectory_dict, tool_registry=registry)
+            trajectory_dict["valid"] = val_res["valid"]
+            trajectory_dict["validation_errors"] = val_res["validation_errors"]
 
-                if val_res["valid"]:
-                    valid_count += 1
-                else:
-                    invalid_count += 1
+            steps_count = len(trajectory.steps)
+            tool_calls_count = sum(1 for s in trajectory.steps if s.action_type == "tool_call")
 
-                # Track metrics
-                steps_count = len(trajectory.steps)
+            if val_res["valid"]:
+                valid_trajectories.append(trajectory_dict)
+                category_counts[category] = category_counts.get(category, 0) + 1
                 total_steps += steps_count
-                
-                tool_calls_in_traj = sum(1 for s in trajectory.steps if s.action_type == "tool_call")
-                total_tool_calls += tool_calls_in_traj
-                tool_failures += sum(1 for s in trajectory.steps if s.error is not None)
+                total_tool_calls += tool_calls_count
+                print(f"    -> [VALID] Steps: {steps_count} | Tool calls: {tool_calls_count}")
+            else:
+                reason = val_res["validation_errors"][0] if val_res["validation_errors"] else "invalid_structure"
+                rejected_trajectories.append({
+                    "trajectory_id": trajectory_id,
+                    "task_id": raw_task_id,
+                    "reason": reason,
+                    "validation_errors": val_res["validation_errors"],
+                })
+                rejection_reasons[reason] = rejection_reasons.get(reason, 0) + 1
+                print(f"    -> [REJECTED] Reason: {reason}")
 
-                if trajectory.termination_reason == "final_answer":
-                    successful_count += 1
-                else:
-                    failed_count += 1
-
-                if trajectory.termination_reason == "max_steps_exceeded":
-                    max_steps_exceeded_count += 1
-
-                if tool_calls_in_traj == 0:
-                    no_tool_count += 1
-                elif tool_calls_in_traj == 1:
-                    single_tool_count += 1
-                else:
-                    multi_step_count += 1
-
-                # Save raw trajectory record
-                out_f.write(json.dumps(trajectory_dict) + "\n")
-                out_f.flush()
-
-                print(f"    -> Status: {trajectory.termination_reason} | Steps: {steps_count} | Tool calls: {tool_calls_in_traj} | Valid: {val_res['valid']}")
-
-            except Exception as e:
-                failed_count += 1
-                print(f"    [ERROR] Task '{task_id}' failed with exception: {str(e)}")
-                continue
+        except Exception as e:
+            reason = f"exception: {str(e)}"
+            rejected_trajectories.append({
+                "trajectory_id": trajectory_id,
+                "task_id": raw_task_id,
+                "reason": reason,
+            })
+            rejection_reasons[reason] = rejection_reasons.get(reason, 0) + 1
+            print(f"    -> [ERROR] Exception: {str(e)}")
 
     end_time = time.time()
     elapsed_seconds = end_time - start_time
-    avg_time_per_task = (elapsed_seconds / total_tasks) if total_tasks > 0 else 0.0
-    avg_steps = (total_steps / total_tasks) if total_tasks > 0 else 0.0
+    valid_count = len(valid_trajectories)
+    rejected_count = len(rejected_trajectories)
+    avg_steps = (total_steps / valid_count) if valid_count > 0 else 0.0
+    avg_tool_calls = (total_tool_calls / valid_count) if valid_count > 0 else 0.0
+
+    # Write output JSONL files
+    with open(args.output, "w", encoding="utf-8") as out_f:
+        for traj in valid_trajectories:
+            out_f.write(json.dumps(traj) + "\n")
+
+    if args.rejected_output:
+        with open(args.rejected_output, "w", encoding="utf-8") as rej_f:
+            for rej in rejected_trajectories:
+                rej_f.write(json.dumps(rej) + "\n")
 
     metrics = {
+        "requested": total_tasks,
+        "generated": total_tasks,
+        "valid": valid_count,
+        "rejected": rejected_count,
+        "categories": category_counts,
+        "average_steps": round(avg_steps, 2),
+        "average_tool_calls": round(avg_tool_calls, 2),
+        "rejection_reasons": rejection_reasons,
+        "generation_time": round(elapsed_seconds, 2),
+        "seed": args.seed,
         "teacher_model": teacher_info.get("teacher_model", "unknown"),
         "backend": teacher_info.get("backend", "unknown"),
-        "total_tasks": total_tasks,
-        "successful_trajectories": successful_count,
-        "failed_trajectories": failed_count,
-        "valid_trajectories": valid_count,
-        "invalid_trajectories": invalid_count,
-        "no_tool_trajectories": no_tool_count,
-        "single_tool_trajectories": single_tool_count,
-        "multi_step_trajectories": multi_step_count,
-        "average_steps_per_task": round(avg_steps, 2),
-        "total_tool_calls": total_tool_calls,
-        "tool_call_failures": tool_failures,
-        "max_steps_exceeded_terminations": max_steps_exceeded_count,
-        "total_generation_time_seconds": round(elapsed_seconds, 2),
-        "average_time_per_task_seconds": round(avg_time_per_task, 2),
     }
 
-    # Save metrics JSON
     if args.metrics_output:
         os.makedirs(os.path.dirname(os.path.abspath(args.metrics_output)), exist_ok=True)
         with open(args.metrics_output, "w", encoding="utf-8") as m_f:
             json.dump(metrics, m_f, indent=2)
 
-    # Print summary
-    print(f"\n==================== GENERATION SUMMARY METRICS ====================")
+    print(f"\n==================== GENERATION STATS ====================")
     print(json.dumps(metrics, indent=2))
-    print(f"Raw trajectories saved to : '{args.output}'")
-    print(f"Metrics report saved to   : '{args.metrics_output}'")
-    print("===================================================================\n")
+    print(f"Valid trajectories saved to : '{args.output}'")
+    print(f"Rejected trajectories saved to: '{args.rejected_output}'")
+    print(f"Generation stats saved to    : '{args.metrics_output}'")
+    print("=========================================================\n")
 
 
 if __name__ == "__main__":

@@ -287,6 +287,10 @@ def main():
         return
 
     # 9. Full Training setup with HuggingFace Trainer
+    import inspect
+
+    valid_arg_names = set(inspect.signature(TrainingArguments.__init__).parameters.keys())
+
     training_kwargs = {
         "output_dir": str(output_path),
         "num_train_epochs": args.epochs,
@@ -294,23 +298,30 @@ def main():
         "per_device_eval_batch_size": args.batch_size,
         "gradient_accumulation_steps": args.gradient_accumulation_steps,
         "learning_rate": args.learning_rate,
-        "warmup_ratio": args.warmup_ratio,
         "logging_steps": args.logging_steps,
         "save_steps": args.save_steps,
-        "eval_steps": args.save_steps,
         "save_total_limit": 3,
         "seed": args.seed,
         "fp16": gpu_info["cuda_available"] and not args.force_cpu,
         "report_to": "none",
     }
-    # Set eval strategy compatible with transformers version
+
+    if "warmup_ratio" in valid_arg_names:
+        training_kwargs["warmup_ratio"] = args.warmup_ratio
+    elif "warmup_steps" in valid_arg_names:
+        total_steps = (len(train_data) // max(1, args.batch_size * args.gradient_accumulation_steps)) * args.epochs
+        training_kwargs["warmup_steps"] = max(1, int(total_steps * args.warmup_ratio))
+
     if len(val_data) > 0:
-        try:
-            training_args = TrainingArguments(eval_strategy="steps", **training_kwargs)
-        except (TypeError, ValueError):
-            training_args = TrainingArguments(evaluation_strategy="steps", **training_kwargs)
-    else:
-        training_args = TrainingArguments(**training_kwargs)
+        if "eval_strategy" in valid_arg_names:
+            training_kwargs["eval_strategy"] = "steps"
+            training_kwargs["eval_steps"] = args.save_steps
+        elif "evaluation_strategy" in valid_arg_names:
+            training_kwargs["evaluation_strategy"] = "steps"
+            training_kwargs["eval_steps"] = args.save_steps
+
+    filtered_kwargs = {k: v for k, v in training_kwargs.items() if k in valid_arg_names}
+    training_args = TrainingArguments(**filtered_kwargs)
 
     trainer = Trainer(
         model=model,

@@ -287,24 +287,30 @@ def main():
         return
 
     # 9. Full Training setup with HuggingFace Trainer
-    training_args = TrainingArguments(
-        output_dir=str(output_path),
-        overwrite_output_dir=False,
-        num_train_epochs=args.epochs,
-        per_device_train_batch_size=args.batch_size,
-        per_device_eval_batch_size=args.batch_size,
-        gradient_accumulation_steps=args.gradient_accumulation_steps,
-        learning_rate=args.learning_rate,
-        warmup_ratio=args.warmup_ratio,
-        logging_steps=args.logging_steps,
-        save_steps=args.save_steps,
-        evaluation_strategy="steps" if len(val_data) > 0 else "no",
-        eval_steps=args.save_steps,
-        save_total_limit=3,
-        seed=args.seed,
-        fp16=gpu_info["cuda_available"] and not args.force_cpu,
-        report_to="none",
-    )
+    training_kwargs = {
+        "output_dir": str(output_path),
+        "num_train_epochs": args.epochs,
+        "per_device_train_batch_size": args.batch_size,
+        "per_device_eval_batch_size": args.batch_size,
+        "gradient_accumulation_steps": args.gradient_accumulation_steps,
+        "learning_rate": args.learning_rate,
+        "warmup_ratio": args.warmup_ratio,
+        "logging_steps": args.logging_steps,
+        "save_steps": args.save_steps,
+        "eval_steps": args.save_steps,
+        "save_total_limit": 3,
+        "seed": args.seed,
+        "fp16": gpu_info["cuda_available"] and not args.force_cpu,
+        "report_to": "none",
+    }
+    # Set eval strategy compatible with transformers version
+    if len(val_data) > 0:
+        try:
+            training_args = TrainingArguments(eval_strategy="steps", **training_kwargs)
+        except (TypeError, ValueError):
+            training_args = TrainingArguments(evaluation_strategy="steps", **training_kwargs)
+    else:
+        training_args = TrainingArguments(**training_kwargs)
 
     trainer = Trainer(
         model=model,

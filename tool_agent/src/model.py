@@ -23,6 +23,22 @@ class ModelInterface(ABC):
         raise NotImplementedError
 
 
+DEFAULT_SYSTEM_PROMPT = (
+    "You are a tool-use agent.\n\n"
+    "For each user request:\n"
+    "1. Decide whether you can answer directly or whether a tool is required.\n"
+    "2. If a tool is required, output ONLY:\n"
+    '   {"type": "tool_call", "name": "<tool_name>", "arguments": {...}}\n'
+    "3. After receiving TOOL_RESULT, inspect the result and decide what to do next.\n"
+    "4. If another tool is necessary, output the next tool_call.\n"
+    "5. If you have enough information to answer the user's request, output ONLY:\n"
+    '   {"type": "final", "content": "<answer>"}\n'
+    "6. Do not repeat an identical tool call unless there is a genuine reason to do so.\n"
+    "7. Do not use a tool when the question can be answered directly.\n"
+    "8. The harness executes tool calls and provides their results. You only decide what action to take next."
+)
+
+
 class HuggingFaceModel(ModelInterface):
     """
     Hugging Face Transformers implementation supporting Qwen series models
@@ -39,6 +55,7 @@ class HuggingFaceModel(ModelInterface):
         dtype: str = "auto",
         max_new_tokens: int = 1024,
         temperature: float = 0.0,
+        use_system_prompt: bool = False,
     ):
         try:
             import os
@@ -58,6 +75,7 @@ class HuggingFaceModel(ModelInterface):
         self.model_path = resolved_path
         self.max_new_tokens = max_new_tokens
         self.temperature = temperature
+        self.use_system_prompt = use_system_prompt
 
         # Detect source type (local filesystem vs HF Hub)
         if os.path.exists(resolved_path) or os.path.isdir(resolved_path):
@@ -85,20 +103,21 @@ class HuggingFaceModel(ModelInterface):
                 torch_dtype = torch.float32
 
         print(f"\n==================== MODEL CONFIGURATION ====================")
-        print(f"Model source : {self.model_source}")
-        print(f"Model path   : {resolved_path}")
-        print(f"Model type   : HuggingFace (Instance #{HuggingFaceModel.instantiation_count})")
-        print(f"Device       : {device}")
-        print(f"Dtype        : {torch_dtype}")
+        print(f"Model source  : {self.model_source}")
+        print(f"Model path    : {resolved_path}")
+        print(f"Model type    : HuggingFace (Instance #{HuggingFaceModel.instantiation_count})")
+        print(f"Device        : {device}")
+        print(f"Dtype         : {torch_dtype}")
+        print(f"System Prompt : {'ENABLED' if self.use_system_prompt else 'DISABLED'}")
 
         if torch.cuda.is_available() and device == "cuda":
             gpu_name = torch.cuda.get_device_name(0)
             total_vram = torch.cuda.get_device_properties(0).total_memory / (1024 ** 3)
             alloc_vram = torch.cuda.memory_allocated(0) / (1024 ** 3)
-            print(f"GPU Model    : {gpu_name}")
-            print(f"GPU VRAM     : Total {total_vram:.2f} GB | Allocated {alloc_vram:.2f} GB")
+            print(f"GPU Model     : {gpu_name}")
+            print(f"GPU VRAM      : Total {total_vram:.2f} GB | Allocated {alloc_vram:.2f} GB")
         else:
-            print(f"CUDA Status  : Not available / Disabled (Running on CPU)")
+            print(f"CUDA Status   : Not available / Disabled (Running on CPU)")
         print("============================================================\n")
 
         self.tokenizer = AutoTokenizer.from_pretrained(resolved_path, trust_remote_code=True)
@@ -126,11 +145,18 @@ class HuggingFaceModel(ModelInterface):
         """
         Format prompt using tokenizer chat template or fallback system prompt.
         """
-        # Try native chat template with tools first
+        formatted_messages = [dict(m) for m in messages]
+
+        # Inject system prompt if enabled
+        if self.use_system_prompt:
+            if not formatted_messages or formatted_messages[0].get("role") != "system":
+                formatted_messages.insert(0, {"role": "system", "content": DEFAULT_SYSTEM_PROMPT})
+
+        # Try native chat template first
         if hasattr(self.tokenizer, "apply_chat_template"):
             try:
                 formatted = self.tokenizer.apply_chat_template(
-                    messages,
+                    formatted_messages,
                     tools=tools if tools else None,
                     tokenize=False,
                     add_generation_prompt=True,

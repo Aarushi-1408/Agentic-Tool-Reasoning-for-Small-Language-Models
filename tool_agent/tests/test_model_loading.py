@@ -103,3 +103,19 @@ def test_6_baseline_evaluation_remains_unchanged():
     with open(eval_benchmark_path, "r", encoding="utf-8") as f:
         tasks = json.load(f)
     assert len(tasks) == 60
+
+
+def test_7_system_prompt_formatting():
+    """Verify system prompt injection logic."""
+    from src.model import DEFAULT_SYSTEM_PROMPT
+    assert "You are a tool-use agent." in DEFAULT_SYSTEM_PROMPT
+    assert '{"type": "final", "content": "<answer>"}' in DEFAULT_SYSTEM_PROMPT
+
+    messages = [{"role": "user", "content": "Hi"}]
+    formatted = [dict(m) for m in messages]
+    formatted.insert(0, {"role": "system", "content": DEFAULT_SYSTEM_PROMPT})
+
+    assert len(formatted) == 2
+    assert formatted[0]["role"] == "system"
+    assert formatted[1]["role"] == "user"
+

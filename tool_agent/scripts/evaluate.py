@@ -28,6 +28,8 @@ def main():
     parser.add_argument("--config", type=str, default="configs/default.yaml", help="Path to config YAML")
     parser.add_argument("--model", type=str, default=None, help="Model name or checkpoint directory path")
     parser.add_argument("--model-path", type=str, default=None, help="Alias for --model path")
+    parser.add_argument("--system-prompt", dest="use_system_prompt", action="store_true", default=False, help="Enable inference protocol system prompt")
+    parser.add_argument("--no-system-prompt", dest="use_system_prompt", action="store_false", help="Disable inference protocol system prompt")
     parser.add_argument("--mock", action="store_true", help="Use MockModel backend for fast offline evaluation")
     parser.add_argument("--output", type=str, default=None, help="Optional output path for evaluation report JSON")
     parser.add_argument("--output-dir", type=str, default=None, help="Directory path to save metrics.json and trajectories.jsonl")
@@ -65,12 +67,13 @@ def main():
         device = model_cfg.get("device", "auto")
         dtype = model_cfg.get("dtype", "auto")
         max_new_tokens = model_cfg.get("max_new_tokens", 1024)
-        print(f"[INFO] Loading HuggingFace model '{model_name}'...")
+        print(f"[INFO] Loading HuggingFace model '{model_name}' (System Prompt: {args.use_system_prompt})...")
         model = HuggingFaceModel(
             model_name=model_name,
             device=device,
             dtype=dtype,
             max_new_tokens=max_new_tokens,
+            use_system_prompt=args.use_system_prompt,
         )
 
     max_steps = agent_cfg.get("max_steps", 10)

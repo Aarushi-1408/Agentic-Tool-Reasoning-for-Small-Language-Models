@@ -189,10 +189,15 @@ def main():
     # 2. Check dataset availability (Do NOT modify dataset file)
     dataset_path = Path(args.dataset)
     if not dataset_path.exists():
-        print(f"[ERROR] Dataset file not found at '{args.dataset}'")
-        sys.exit(1)
+        fallback_path = PROJECT_ROOT / args.dataset
+        if fallback_path.exists():
+            dataset_path = fallback_path
+        else:
+            print(f"[ERROR] Dataset file not found at '{args.dataset}' or '{fallback_path}'")
+            print("Please ensure you have committed and pushed 'data/sft/train_v2_100.jsonl' to git.")
+            sys.exit(1)
 
-    print(f"[INFO] Reading dataset from '{args.dataset}' (Read-Only)...")
+    print(f"[INFO] Reading dataset from '{dataset_path}' (Read-Only)...")
     raw_examples = load_sft_dataset(str(dataset_path))
     print(f"[INFO] Total dataset size: {len(raw_examples)} examples")
 

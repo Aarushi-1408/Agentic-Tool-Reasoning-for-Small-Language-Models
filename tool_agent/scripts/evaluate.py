@@ -26,6 +26,8 @@ def main():
     parser = argparse.ArgumentParser(description="Evaluate Agent Harness on a JSON dataset of tasks.")
     parser.add_argument("--tasks", type=str, default="tasks/eval_v1.json", help="Path to tasks JSON file")
     parser.add_argument("--config", type=str, default="configs/default.yaml", help="Path to config YAML")
+    parser.add_argument("--model", type=str, default=None, help="Model name or checkpoint directory path")
+    parser.add_argument("--model-path", type=str, default=None, help="Alias for --model path")
     parser.add_argument("--mock", action="store_true", help="Use MockModel backend for fast offline evaluation")
     parser.add_argument("--output", type=str, default=None, help="Optional output path for evaluation report JSON")
     parser.add_argument("--output-dir", type=str, default=None, help="Directory path to save metrics.json and trajectories.jsonl")
@@ -59,7 +61,7 @@ def main():
         print("[INFO] Evaluating with MockModel backend.")
         model = MockModel()
     else:
-        model_name = model_cfg.get("name", "Qwen/Qwen3-1.7B")
+        model_name = args.model_path or args.model or model_cfg.get("name", "Qwen/Qwen3-1.7B")
         device = model_cfg.get("device", "auto")
         dtype = model_cfg.get("dtype", "auto")
         max_new_tokens = model_cfg.get("max_new_tokens", 1024)

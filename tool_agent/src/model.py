@@ -33,13 +33,15 @@ class HuggingFaceModel(ModelInterface):
 
     def __init__(
         self,
-        model_name: str = "Qwen/Qwen3-1.7B",
+        model_name: Optional[str] = None,
+        model_path: Optional[str] = None,
         device: str = "auto",
         dtype: str = "auto",
         max_new_tokens: int = 1024,
         temperature: float = 0.0,
     ):
         try:
+            import os
             import torch
             from transformers import AutoModelForCausalLM, AutoTokenizer
         except ImportError:
@@ -49,9 +51,19 @@ class HuggingFaceModel(ModelInterface):
             )
 
         HuggingFaceModel.instantiation_count += 1
-        self.model_name = model_name
+        
+        # Resolve target model path or HF hub ID
+        resolved_path = model_path or model_name or "Qwen/Qwen3-1.7B"
+        self.model_name = resolved_path
+        self.model_path = resolved_path
         self.max_new_tokens = max_new_tokens
         self.temperature = temperature
+
+        # Detect source type (local filesystem vs HF Hub)
+        if os.path.exists(resolved_path) or os.path.isdir(resolved_path):
+            self.model_source = "local"
+        else:
+            self.model_source = "HuggingFace Hub"
 
         # Resolve device & dtype
         if device == "auto":
@@ -65,35 +77,42 @@ class HuggingFaceModel(ModelInterface):
         elif dtype == "float32":
             torch_dtype = torch.float32
         else:
-            torch_dtype = torch.float16 if device == "cuda" else torch.float32
+            if torch.cuda.is_available() and device == "cuda" and torch.cuda.is_bf16_supported():
+                torch_dtype = torch.bfloat16
+            elif torch.cuda.is_available() and device == "cuda":
+                torch_dtype = torch.float16
+            else:
+                torch_dtype = torch.float32
 
-        print(f"\n==================== MODEL LIFECYCLE ====================")
-        print(f"Instantiating model backend: '{model_name}' (Instance #{HuggingFaceModel.instantiation_count})")
-        print(f"Target Device            : '{device}'")
-        print(f"Target Dtype             : '{torch_dtype}'")
+        print(f"\n==================== MODEL CONFIGURATION ====================")
+        print(f"Model source : {self.model_source}")
+        print(f"Model path   : {resolved_path}")
+        print(f"Model type   : HuggingFace (Instance #{HuggingFaceModel.instantiation_count})")
+        print(f"Device       : {device}")
+        print(f"Dtype        : {torch_dtype}")
 
         if torch.cuda.is_available() and device == "cuda":
             gpu_name = torch.cuda.get_device_name(0)
             total_vram = torch.cuda.get_device_properties(0).total_memory / (1024 ** 3)
             alloc_vram = torch.cuda.memory_allocated(0) / (1024 ** 3)
-            print(f"GPU Name                 : {gpu_name}")
-            print(f"GPU VRAM                 : Total {total_vram:.2f} GB | Allocated {alloc_vram:.2f} GB")
+            print(f"GPU Model    : {gpu_name}")
+            print(f"GPU VRAM     : Total {total_vram:.2f} GB | Allocated {alloc_vram:.2f} GB")
         else:
-            print(f"CUDA Status              : Not available / Disabled (Running on CPU)")
-        print("=========================================================\n")
+            print(f"CUDA Status  : Not available / Disabled (Running on CPU)")
+        print("============================================================\n")
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(resolved_path, trust_remote_code=True)
         
         if device == "cpu":
             self.model = AutoModelForCausalLM.from_pretrained(
-                model_name,
+                resolved_path,
                 torch_dtype=torch_dtype,
                 trust_remote_code=True,
             )
             self.model.to("cpu")
         else:
             self.model = AutoModelForCausalLM.from_pretrained(
-                model_name,
+                resolved_path,
                 device_map="auto",
                 torch_dtype=torch_dtype,
                 trust_remote_code=True,

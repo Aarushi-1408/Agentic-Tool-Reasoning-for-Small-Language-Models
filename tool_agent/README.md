@@ -179,3 +179,42 @@ The harness loop in `src/harness.py` continues until:
 
 ### 7. Where Actual Model Decision-Making Occurs
 All decision-making occurs **inside the model weights**. The harness acts purely as an executor and message router.
+
+---
+
+## Running the SFT Model
+
+To run inference or evaluate the fine-tuned SFT checkpoint (`Bitsbrains/aarushi-qwen3-1.7b-tool-agent-sft-v2`):
+
+1. **Download the model weights from Hugging Face**:
+   Download the trained SFT checkpoint files from Hugging Face Hub.
+
+2. **Place the checkpoint files under local directory**:
+   Save the model files into the directory structure:
+   ```text
+   models/qwen3-1.7b-tool-agent-sft-v2/
+   ├── model.safetensors
+   ├── config.json
+   ├── generation_config.json
+   ├── tokenizer.json
+   ├── tokenizer_config.json
+   └── chat_template.jinja
+   ```
+
+3. **Run 3-Task Smoke Test**:
+   ```bash
+   python scripts/smoke_test.py --model-path models/qwen3-1.7b-tool-agent-sft-v2/
+   # Or directly from HuggingFace Hub ID:
+   python scripts/smoke_test.py --model-path Bitsbrains/aarushi-qwen3-1.7b-tool-agent-sft-v2/
+   ```
+
+4. **Run Single Task Inference**:
+   ```bash
+   python scripts/run_agent.py --task "Calculate 25 * 37." --model-path models/qwen3-1.7b-tool-agent-sft-v2/
+   ```
+
+5. **Run Benchmark Evaluation (60 Frozen Tasks)**:
+   ```bash
+   python scripts/evaluate.py --tasks tasks/eval_v1.json --model-path models/qwen3-1.7b-tool-agent-sft-v2/ --output-dir evaluation/sft_v2_100/
+   ```
+

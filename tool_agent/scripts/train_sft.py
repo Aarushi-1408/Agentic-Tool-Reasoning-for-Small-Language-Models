@@ -223,9 +223,17 @@ def main():
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token_id = tokenizer.eos_token_id
 
-    dtype = torch.float16 if gpu_info["cuda_available"] and not args.force_cpu else torch.float32
+    use_bf16 = gpu_info["cuda_available"] and torch.cuda.is_bf16_supported() and not args.force_cpu
+    use_fp16 = gpu_info["cuda_available"] and not use_bf16 and not args.force_cpu
 
-    print(f"[INFO] Loading model from '{args.model}' (dtype: {dtype})...")
+    if use_bf16:
+        dtype = torch.bfloat16
+    elif use_fp16:
+        dtype = torch.float16
+    else:
+        dtype = torch.float32
+
+    print(f"[INFO] Loading model from '{args.model}' (dtype: {dtype}, bf16: {use_bf16}, fp16: {use_fp16})...")
     if gpu_info["cuda_available"] and not args.force_cpu:
         model = AutoModelForCausalLM.from_pretrained(
             args.model,
@@ -302,7 +310,8 @@ def main():
         "save_steps": args.save_steps,
         "save_total_limit": 3,
         "seed": args.seed,
-        "fp16": gpu_info["cuda_available"] and not args.force_cpu,
+        "bf16": use_bf16,
+        "fp16": use_fp16,
         "report_to": "none",
     }
 

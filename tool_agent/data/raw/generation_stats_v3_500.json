@@ -1,0 +1,20 @@
+{
+  "requested": 500,
+  "generated": 500,
+  "valid": 500,
+  "rejected": 0,
+  "categories": {
+    "no_tool": 175,
+    "single_tool": 115,
+    "two_step": 90,
+    "multi_step": 90,
+    "error_recovery": 30
+  },
+  "average_steps": 2.29,
+  "average_tool_calls": 1.29,
+  "rejection_reasons": {},
+  "generation_time": 0.62,
+  "seed": 42,
+  "teacher_model": "Qwen/Qwen3-8B",
+  "backend": "mock"
+}

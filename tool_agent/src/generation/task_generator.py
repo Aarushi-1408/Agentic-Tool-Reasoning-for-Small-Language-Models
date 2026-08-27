@@ -22,12 +22,12 @@ class TaskGenerator:
 
     def generate_tasks(
         self,
-        num_no_tool: int = 20,
-        num_single_tool: int = 25,
-        num_two_step: int = 25,
-        num_multi_step: int = 20,
-        num_error_recovery: int = 10,
-        id_prefix: str = "train_v2_",
+        num_no_tool: int = 175,
+        num_single_tool: int = 115,
+        num_two_step: int = 90,
+        num_multi_step: int = 90,
+        num_error_recovery: int = 30,
+        id_prefix: str = "train_v3_",
     ) -> List[Dict[str, Any]]:
         tasks: List[Dict[str, Any]] = []
 
@@ -58,6 +58,21 @@ class TaskGenerator:
             ("What is the chemical formula for carbon dioxide?", "easy", False),
             ("How many colors are in a standard rainbow?", "easy", False),
             ("What is the main function of red blood cells?", "medium", False),
+            ("What does HTML stand for?", "easy", False),
+            ("Who wrote the play Hamlet?", "easy", False),
+            ("What is 12 squared?", "easy", False),
+            ("What is the capital of Canada?", "easy", False),
+            ("What is the largest organ in the human body?", "easy", False),
+            ("What force keeps planets in orbit around the Sun?", "easy", False),
+            ("How many degrees are in a right angle?", "easy", False),
+            ("What language is spoken in Brazil?", "easy", False),
+            ("What does URL stand for?", "easy", False),
+            ("What is the hardest natural substance on Earth?", "easy", False),
+            ("What planet is closest to the Sun?", "easy", False),
+            ("What does API stand for in software engineering?", "easy", False),
+            ("Explain what recursion means in computer science in simple terms.", "medium", False),
+            ("What is the chemical formula for table salt?", "easy", False),
+            ("How many continents are there on Earth?", "easy", False),
         ]
 
         # 2. Single-Tool Templates
@@ -109,21 +124,6 @@ class TaskGenerator:
             ("Look up 'orange_price', then add 10 to it using calculator.", "two_step", "medium", True),
             ("Reverse string 'PythonCode', then convert the reversed string to uppercase.", "two_step", "medium", True),
             ("Calculate 15 * 8 using calculator, then echo the result.", "two_step", "medium", True),
-            ("Look up 'tokyo_population' and state whether it is greater than 10,000,000.", "two_step", "medium", True),
-            ("Calculate (60 * 3) - 15 using calculator and state if the result is even or odd.", "two_step", "medium", True),
-            ("Check length of text 'Deep Learning System' using string_manipulator and state whether it has more than 15 characters.", "two_step", "medium", True),
-            ("Look up 'moon_distance_km' and divide it by 100 using calculator.", "two_step", "medium", True),
-            ("Reverse text 'BenchmarkEvaluation', then calculate the length of the reversed string.", "two_step", "medium", True),
-            ("Convert string 'NeuralNetwork' to lowercase, then reverse it.", "two_step", "medium", True),
-            ("Look up 'gold_atomic_number' and add 100 to it.", "two_step", "medium", True),
-            ("Calculate 500 / 25, then echo the result.", "two_step", "medium", True),
-            ("Look up 'paris_berlin_distance_km' and add 50 km to it.", "two_step", "medium", True),
-            ("Reverse 'DataScaling', then echo the reversed string.", "two_step", "medium", True),
-            ("Look up 'orange_price' and multiply it by 20.", "two_step", "medium", True),
-            ("Convert 'LargeLanguageModel' to lowercase, then check its length.", "two_step", "medium", True),
-            ("Calculate 120 + 380, then divide by 10.", "two_step", "medium", True),
-            ("Look up 'apple_price' and add 3 to it.", "two_step", "medium", True),
-            ("Reverse string 'FineTuning', then check its length.", "two_step", "medium", True),
         ]
 
         # 4. Multi-Step Templates
@@ -141,15 +141,6 @@ class TaskGenerator:
             ("Look up 'orange_price', multiply by 15 using calculator, reverse the product string, then echo it.", "multi_step", "hard", True),
             ("Look up 'paris_berlin_distance_km', add 200 using calculator, divide by 5, then reverse the resulting digits.", "multi_step", "hard", True),
             ("Reverse 'MultiStepReasoning', convert to uppercase, find its length, then multiply length by 2.", "multi_step", "hard", True),
-            ("Look up 'apple_price', 'orange_price', sum them up, multiply by 10, then echo the final number.", "multi_step", "hard", True),
-            ("Look up 'gold_atomic_number', multiply by 2, add 42, then reverse the final number string.", "multi_step", "hard", True),
-            ("Look up 'tokyo_population' and 'paris_berlin_distance_km', add them together, divide by 10, then echo the final value.", "multi_step", "hard", True),
-            ("Convert 'Supercalifragilistic' to lowercase, calculate its length, multiply by 4, then echo the result.", "multi_step", "hard", True),
-            ("Look up 'moon_distance_km' and 'speed_of_light_km_s', divide distance by speed, multiply result by 100, then echo.", "multi_step", "hard", True),
-            ("Reverse 'TrajectoryValidation', find its length, multiply length by 7, and echo the result.", "multi_step", "hard", True),
-            ("Look up 'orange_price', add 5, multiply by 8, then reverse the final number string.", "multi_step", "hard", True),
-            ("Convert 'ToolRegistryExecution' to uppercase, find length, divide length by 2, and echo.", "multi_step", "hard", True),
-            ("Look up 'gold_atomic_number', subtract 9, multiply by 10, and reverse the resulting digits.", "multi_step", "hard", True),
         ]
 
         # 5. Error Recovery Templates
@@ -162,23 +153,14 @@ class TaskGenerator:
             ("Try evaluating invalid math expression '100 / 0'. Upon receiving divide by zero error, evaluate '100 / 5' instead.", "error_recovery", "hard", True),
             ("Call string_manipulator with invalid operation 'translate' on text 'hello'. Upon receiving unsupported operation error, call operation 'uppercase' instead.", "error_recovery", "hard", True),
             ("Look up key 'invalid_key_999'. If lookup fails with missing key error, look up key 'tokyo_population' and report it.", "error_recovery", "hard", True),
-            ("Calculate expression '50 + unknown_variable'. Upon receiving error, calculate '50 + 250' instead.", "error_recovery", "hard", True),
-            ("Try calling unknown tool 'web_search' for 'moon_distance_km'. Upon receiving unknown tool error, use tool 'lookup' with key 'moon_distance_km' instead.", "error_recovery", "hard", True),
-            ("Try reversing text with missing argument 'text'. Upon argument error, call reverse with text='Antigravity'.", "error_recovery", "hard", True),
-            ("Try evaluating expression '(10 + 20' with syntax error. Upon receiving error, evaluate '(10 + 20) * 2'.", "error_recovery", "hard", True),
         ]
 
         task_counter = 1
 
         def add_batch(templates, target_count, category):
             nonlocal task_counter
-            available = list(templates)
-            if len(available) < target_count:
-                multiplier = (target_count // len(available)) + 1
-                available = available * multiplier
-
-            selected = available[:target_count]
-            for item in selected:
+            for i in range(target_count):
+                item = templates[i % len(templates)]
                 prompt = item[0]
                 diff = item[1] if len(item) > 1 else "medium"
                 req_tool = item[2] if len(item) > 2 else True

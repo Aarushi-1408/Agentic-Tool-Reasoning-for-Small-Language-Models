@@ -120,7 +120,11 @@ class HuggingFaceModel(ModelInterface):
             print(f"CUDA Status   : Not available / Disabled (Running on CPU)")
         print("============================================================\n")
 
-        self.tokenizer = AutoTokenizer.from_pretrained(resolved_path, trust_remote_code=True)
+        try:
+            self.tokenizer = AutoTokenizer.from_pretrained(resolved_path, trust_remote_code=True)
+        except Exception as e:
+            print(f"[WARNING] Failed to load tokenizer from '{resolved_path}' ({e}). Falling back to 'Qwen/Qwen3-1.7B' tokenizer...")
+            self.tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-1.7B", trust_remote_code=True)
         
         if device == "cpu":
             self.model = AutoModelForCausalLM.from_pretrained(

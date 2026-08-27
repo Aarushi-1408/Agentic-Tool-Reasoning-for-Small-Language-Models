@@ -1,0 +1,24 @@
+{
+  "total_tasks": 60,
+  "successful_tasks": 42,
+  "accuracy": 0.7,
+  "tool_required_accuracy": 0.75,
+  "no_tool_accuracy": 0.5,
+  "tool_selection_accuracy": 0.9791666666666666,
+  "unnecessary_tool_use_rate": 0.6666666666666666,
+  "multi_step_accuracy": 0.6666666666666666,
+  "avg_steps_per_task": 2.5166666666666666,
+  "total_tool_calls": 88,
+  "valid_tool_call_rate": 0.8863636363636364,
+  "category_accuracies": {
+    "tool_selection": 0.8333333333333334,
+    "multi_step": 0.3333333333333333,
+    "error_recovery": 0.6666666666666666,
+    "single_tool": 0.8666666666666667,
+    "no_tool": 0.5,
+    "two_step": 0.8666666666666667
+  },
+  "termination_reasons": {
+    "final_answer": 60
+  }
+}

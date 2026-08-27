@@ -11,12 +11,12 @@
   "total_tool_calls": 425,
   "valid_tool_call_rate": 0.971764705882353,
   "category_accuracies": {
-    "tool_selection": 0.3333333333333333,
-    "multi_step": 0.0,
+    "no_tool": 0.08333333333333333,
     "error_recovery": 0.6666666666666666,
     "two_step": 0.2,
+    "tool_selection": 0.3333333333333333,
     "single_tool": 0.13333333333333333,
-    "no_tool": 0.08333333333333333
+    "multi_step": 0.0
   },
   "termination_reasons": {
     "final_answer": 23,

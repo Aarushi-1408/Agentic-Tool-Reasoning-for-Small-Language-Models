@@ -349,9 +349,11 @@ def main():
     print("====================================================================\n")
 
     # 10. Save Final Model & Tokenizer
-    print(f"[INFO] Saving final model checkpoint to '{final_model_path}'...")
+    print(f"[INFO] Saving final model checkpoint to '{final_model_path}' and '{output_path}'...")
     trainer.save_model(str(final_model_path))
     tokenizer.save_pretrained(str(final_model_path))
+    trainer.save_model(str(output_path))
+    tokenizer.save_pretrained(str(output_path))
 
     # 11. Record Metrics & Training State
     metrics = train_result.metrics

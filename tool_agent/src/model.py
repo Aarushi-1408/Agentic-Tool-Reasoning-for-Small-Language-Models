@@ -80,6 +80,19 @@ class HuggingFaceModel(ModelInterface):
         # Detect source type (local filesystem vs HF Hub)
         if os.path.exists(resolved_path) or os.path.isdir(resolved_path):
             self.model_source = "local"
+            # Auto-resolve final/ or checkpoint-*/ subfolder if config.json is inside subfolder
+            if not os.path.exists(os.path.join(resolved_path, "config.json")):
+                final_sub = os.path.join(resolved_path, "final")
+                if os.path.exists(os.path.join(final_sub, "config.json")):
+                    resolved_path = final_sub
+                else:
+                    # Find latest checkpoint-* subfolder
+                    import glob
+                    ckpts = sorted(glob.glob(os.path.join(resolved_path, "checkpoint-*")), key=os.path.getmtime, reverse=True)
+                    for ckpt in ckpts:
+                        if os.path.exists(os.path.join(ckpt, "config.json")):
+                            resolved_path = ckpt
+                            break
         else:
             self.model_source = "HuggingFace Hub"
 

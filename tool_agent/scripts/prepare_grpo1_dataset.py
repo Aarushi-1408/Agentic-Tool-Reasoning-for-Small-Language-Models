@@ -45,6 +45,10 @@ def prepare_grpo_dataset():
             }
             records.append(rec)
 
+    # Interleave categories via deterministic shuffle
+    import random
+    random.Random(42).shuffle(records)
+
     with open(OUTPUT_PROMPTS, "w", encoding="utf-8") as f:
         for r in records:
             f.write(json.dumps(r) + "\n")

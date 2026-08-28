@@ -84,8 +84,8 @@ class RolloutGenerator:
         self,
         task_metadata: Dict[str, Any],
         group_size: int = 4,
-        temperature: float = 0.7,
-        top_p: float = 0.9,
+        temperature: float = 0.8,
+        top_p: float = 0.95,
     ) -> RolloutResult:
         task_id = task_metadata.get("id", task_metadata.get("task_id", "task_001"))
         category = task_metadata.get("category", "general")

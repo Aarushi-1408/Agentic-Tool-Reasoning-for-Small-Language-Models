@@ -17,8 +17,8 @@ class GRPOConfig:
     
     group_size: int = 4
     learning_rate: float = 5e-6
-    temperature: float = 0.7
-    top_p: float = 0.9
+    temperature: float = 0.8
+    top_p: float = 0.95
     beta: float = 0.04
     clip_eps: float = 0.2
     max_env_steps: int = 10

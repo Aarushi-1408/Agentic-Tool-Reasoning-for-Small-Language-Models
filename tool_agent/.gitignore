@@ -30,8 +30,10 @@ data/raw/*.jsonl
 data/sft/*.jsonl
 !data/sft/train_v2_100.jsonl
 !data/sft/train_v3_500.jsonl
+!data/sft/train_v4_500.jsonl
 !data/sft/train.jsonl
 !data/raw/teacher_trajectories_v3_500.jsonl
+!data/raw/teacher_trajectories_v4_500.jsonl
 !data/tasks/*.jsonl
 logs/
 trajectories/

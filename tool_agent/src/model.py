@@ -82,8 +82,33 @@ class HuggingFaceModel(ModelInterface):
         self.custom_system_prompt = custom_system_prompt
 
         # Detect source type (local filesystem vs HF Hub)
-        if os.path.exists(resolved_path) or os.path.isdir(resolved_path):
+        abs_path = os.path.abspath(resolved_path)
+        is_local_path = (
+            os.path.exists(resolved_path)
+            or os.path.exists(abs_path)
+            or resolved_path.startswith("outputs")
+            or resolved_path.startswith("models")
+            or resolved_path.startswith(".")
+            or resolved_path.startswith("/")
+            or resolved_path.startswith("\\")
+        )
+
+        if is_local_path:
+            target_path = abs_path if os.path.exists(abs_path) else resolved_path
+            if not os.path.exists(target_path):
+                # Try relative to project root
+                proj_root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", resolved_path))
+                if os.path.exists(proj_root_path):
+                    target_path = proj_root_path
+                else:
+                    raise FileNotFoundError(
+                        f"\n[ERROR] Local checkpoint directory '{resolved_path}' was not found on disk at '{abs_path}'!\n"
+                        f"Please ensure you have trained the model or pass a valid model path / Hugging Face ID (e.g. '--model Qwen/Qwen3-1.7B')."
+                    )
+
             self.model_source = "local"
+            resolved_path = target_path
+
             # Auto-resolve final/ or checkpoint-*/ subfolder if config.json is inside subfolder
             if not os.path.exists(os.path.join(resolved_path, "config.json")):
                 final_sub = os.path.join(resolved_path, "final")

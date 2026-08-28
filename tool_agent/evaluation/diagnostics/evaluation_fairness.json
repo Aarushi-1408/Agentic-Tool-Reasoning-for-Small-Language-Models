@@ -1,0 +1,8 @@
+{
+  "same_eval_benchmark": true,
+  "tasks_file": "tasks/eval_v1.json",
+  "num_tasks": 60,
+  "sft_v2_system_prompt_status": "ENABLED",
+  "sft_v3_system_prompt_status": "ENABLED",
+  "same_harness_and_parser": true
+}

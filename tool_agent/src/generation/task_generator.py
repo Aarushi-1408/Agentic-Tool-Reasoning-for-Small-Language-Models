@@ -22,12 +22,12 @@ class TaskGenerator:
 
     def generate_tasks(
         self,
-        num_no_tool: int = 175,
-        num_single_tool: int = 115,
-        num_two_step: int = 90,
-        num_multi_step: int = 90,
-        num_error_recovery: int = 30,
-        id_prefix: str = "train_v3_",
+        num_no_tool: int = 250,
+        num_single_tool: int = 75,
+        num_two_step: int = 75,
+        num_multi_step: int = 75,
+        num_error_recovery: int = 25,
+        id_prefix: str = "train_v4_",
     ) -> List[Dict[str, Any]]:
         tasks: List[Dict[str, Any]] = []
 
@@ -73,6 +73,16 @@ class TaskGenerator:
             ("Explain what recursion means in computer science in simple terms.", "medium", False),
             ("What is the chemical formula for table salt?", "easy", False),
             ("How many continents are there on Earth?", "easy", False),
+            ("Is an apple a fruit or a vehicle?", "easy", False),
+            ("Define the term 'algorithm' in computer science.", "medium", False),
+            ("What is the capital of France?", "easy", False),
+            ("How many hours are in a standard day?", "easy", False),
+            ("What is the boiling point of water at sea level in Celsius?", "easy", False),
+            ("Which planet is known as the Ringed Planet?", "easy", False),
+            ("What does TCP stand for in networking?", "easy", False),
+            ("What is the author of '1984'?", "easy", False),
+            ("What is the speed of sound in air approximately in m/s?", "medium", False),
+            ("What is 15 minus 7?", "easy", False),
         ]
 
         # 2. Single-Tool Templates
@@ -126,7 +136,7 @@ class TaskGenerator:
             ("Calculate 15 * 8 using calculator, then echo the result.", "two_step", "medium", True),
         ]
 
-        # 4. Multi-Step Templates
+        # 4. Multi-Step Templates (3-step and 4-step sequential chains)
         multi_step_templates = [
             ("Look up 'apple_price' and 'orange_price', calculate total cost for 5 apples and 4 oranges, then reverse the total cost digits.", "multi_step", "hard", True),
             ("Look up 'gold_atomic_number', multiply by 15 using calculator, then reverse the digits of that product string.", "multi_step", "hard", True),

@@ -1,0 +1,22 @@
+{
+  "baseline": {
+    "tc_to_result_to_final": 25,
+    "tc_to_result_to_same_tc": 0,
+    "max_steps_exceeded": 0
+  },
+  "sft_v2_no_prompt": {
+    "tc_to_result_to_final": 23,
+    "tc_to_result_to_same_tc": 177,
+    "max_steps_exceeded": 37
+  },
+  "sft_v2_prompt": {
+    "tc_to_result_to_final": 53,
+    "tc_to_result_to_same_tc": 1,
+    "max_steps_exceeded": 0
+  },
+  "sft_v3_prompt": {
+    "tc_to_result_to_final": 51,
+    "tc_to_result_to_same_tc": 0,
+    "max_steps_exceeded": 0
+  }
+}

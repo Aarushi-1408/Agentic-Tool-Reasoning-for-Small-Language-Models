@@ -71,7 +71,7 @@ class HuggingFaceModel(ModelInterface):
         HuggingFaceModel.instantiation_count += 1
         
         # Resolve target model path or HF hub ID
-        resolved_path = model_path or model_name or "Qwen/Qwen3-1.7B"
+        resolved_path = (model_path or model_name or "Qwen/Qwen3-1.7B").rstrip("~")
         self.model_name = resolved_path
         self.model_path = resolved_path
         self.max_new_tokens = max_new_tokens

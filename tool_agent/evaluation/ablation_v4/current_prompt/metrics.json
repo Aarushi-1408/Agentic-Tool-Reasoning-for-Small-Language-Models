@@ -11,10 +11,10 @@
   "total_tool_calls": 1,
   "valid_tool_call_rate": 1.0,
   "category_accuracies": {
-    "error_recovery": 0.3333333333333333,
+    "no_tool": 0.08333333333333333,
     "single_tool": 0.26666666666666666,
     "multi_step": 0.0,
-    "no_tool": 0.08333333333333333,
+    "error_recovery": 0.3333333333333333,
     "tool_selection": 0.3333333333333333,
     "two_step": 0.0
   },

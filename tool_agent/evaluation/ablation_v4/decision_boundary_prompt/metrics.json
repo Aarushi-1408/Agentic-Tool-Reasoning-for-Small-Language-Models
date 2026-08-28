@@ -1,22 +1,22 @@
 {
   "total_tasks": 60,
-  "successful_tasks": 8,
-  "accuracy": 0.13333333333333333,
-  "tool_required_accuracy": 0.14583333333333334,
-  "no_tool_accuracy": 0.08333333333333333,
-  "tool_selection_accuracy": 0.020833333333333332,
-  "unnecessary_tool_use_rate": 0.0,
-  "multi_step_accuracy": 0.0,
-  "avg_steps_per_task": 1.0166666666666666,
-  "total_tool_calls": 1,
-  "valid_tool_call_rate": 1.0,
+  "successful_tasks": 15,
+  "accuracy": 0.25,
+  "tool_required_accuracy": 0.3125,
+  "no_tool_accuracy": 0.0,
+  "tool_selection_accuracy": 0.75,
+  "unnecessary_tool_use_rate": 0.5833333333333334,
+  "multi_step_accuracy": 0.4166666666666667,
+  "avg_steps_per_task": 2.15,
+  "total_tool_calls": 69,
+  "valid_tool_call_rate": 0.9420289855072463,
   "category_accuracies": {
-    "error_recovery": 0.3333333333333333,
-    "single_tool": 0.26666666666666666,
-    "multi_step": 0.0,
-    "no_tool": 0.08333333333333333,
     "tool_selection": 0.3333333333333333,
-    "two_step": 0.0
+    "multi_step": 0.5555555555555556,
+    "no_tool": 0.0,
+    "single_tool": 0.06666666666666667,
+    "two_step": 0.3333333333333333,
+    "error_recovery": 0.6666666666666666
   },
   "termination_reasons": {
     "final_answer": 60

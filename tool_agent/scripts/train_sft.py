@@ -182,6 +182,12 @@ def main():
 
     args = parser.parse_args()
 
+    # Sanitize input path arguments
+    if args.model:
+        args.model = args.model.rstrip("~")
+    if args.output_dir:
+        args.output_dir = args.output_dir.rstrip("~")
+
     # 1. GPU Diagnostics
     import torch
     gpu_info = print_gpu_diagnostics(force_cpu=args.force_cpu)

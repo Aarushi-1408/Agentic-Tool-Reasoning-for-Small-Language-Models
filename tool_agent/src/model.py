@@ -55,6 +55,7 @@ class HuggingFaceModel(ModelInterface):
         dtype: str = "auto",
         max_new_tokens: int = 1024,
         temperature: float = 0.0,
+        top_p: Optional[float] = None,
         use_system_prompt: bool = False,
         custom_system_prompt: Optional[str] = None,
     ):
@@ -76,6 +77,7 @@ class HuggingFaceModel(ModelInterface):
         self.model_path = resolved_path
         self.max_new_tokens = max_new_tokens
         self.temperature = temperature
+        self.top_p = top_p
         self.use_system_prompt = use_system_prompt
         self.custom_system_prompt = custom_system_prompt
 
@@ -252,13 +254,22 @@ class HuggingFaceModel(ModelInterface):
         prompt = self._build_prompt(messages, tools)
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
 
+        gen_kwargs = {
+            "max_new_tokens": self.max_new_tokens,
+            "pad_token_id": self.tokenizer.eos_token_id,
+        }
+        if self.temperature > 0:
+            gen_kwargs["do_sample"] = True
+            gen_kwargs["temperature"] = self.temperature
+            if self.top_p is not None:
+                gen_kwargs["top_p"] = self.top_p
+        else:
+            gen_kwargs["do_sample"] = False
+
         with torch.no_grad():
             outputs = self.model.generate(
                 **inputs,
-                max_new_tokens=self.max_new_tokens,
-                do_sample=self.temperature > 0,
-                temperature=self.temperature if self.temperature > 0 else None,
-                pad_token_id=self.tokenizer.eos_token_id,
+                **gen_kwargs,
             )
 
         # Slice off input tokens to get generated completion

@@ -84,6 +84,8 @@ class RolloutGenerator:
         self,
         task_metadata: Dict[str, Any],
         group_size: int = 4,
+        temperature: float = 0.7,
+        top_p: float = 0.9,
     ) -> RolloutResult:
         task_id = task_metadata.get("id", task_metadata.get("task_id", "task_001"))
         category = task_metadata.get("category", "general")
@@ -95,15 +97,30 @@ class RolloutGenerator:
             if msgs and msgs[0].get("role") == "user":
                 prompt = msgs[0].get("content", "")
 
+        # Set stochastic sampling parameters for candidate generation
+        orig_temp = getattr(self.model, "temperature", 0.0)
+        orig_top_p = getattr(self.model, "top_p", None)
+        if hasattr(self.model, "temperature"):
+            self.model.temperature = temperature
+        if hasattr(self.model, "top_p"):
+            self.model.top_p = top_p
+
         candidates: List[RolloutCandidate] = []
 
-        for g_idx in range(group_size):
-            # Run environment rollout via harness
-            trajectory = self.harness.run(prompt=prompt, task_id=f"{task_id}_g{g_idx}")
-            
-            # Compute trajectory reward
-            r_res = calculate_reward(trajectory, task_metadata)
-            candidates.append(RolloutCandidate(trajectory=trajectory, reward_result=r_res))
+        try:
+            for g_idx in range(group_size):
+                # Run environment rollout via harness
+                trajectory = self.harness.run(prompt=prompt, task_id=f"{task_id}_g{g_idx}")
+                
+                # Compute trajectory reward
+                r_res = calculate_reward(trajectory, task_metadata)
+                candidates.append(RolloutCandidate(trajectory=trajectory, reward_result=r_res))
+        finally:
+            # Restore model generation parameters
+            if hasattr(self.model, "temperature"):
+                self.model.temperature = orig_temp
+            if hasattr(self.model, "top_p"):
+                self.model.top_p = orig_top_p
 
         result = RolloutResult(
             task_id=task_id,

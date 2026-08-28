@@ -76,6 +76,7 @@ class HuggingFaceModel(ModelInterface):
         self.max_new_tokens = max_new_tokens
         self.temperature = temperature
         self.use_system_prompt = use_system_prompt
+        self.custom_system_prompt = custom_system_prompt
 
         # Detect source type (local filesystem vs HF Hub)
         if os.path.exists(resolved_path) or os.path.isdir(resolved_path):
@@ -166,8 +167,9 @@ class HuggingFaceModel(ModelInterface):
 
         # Inject system prompt if enabled
         if self.use_system_prompt:
+            sys_text = self.custom_system_prompt if self.custom_system_prompt else DEFAULT_SYSTEM_PROMPT
             if not formatted_messages or formatted_messages[0].get("role") != "system":
-                formatted_messages.insert(0, {"role": "system", "content": DEFAULT_SYSTEM_PROMPT})
+                formatted_messages.insert(0, {"role": "system", "content": sys_text})
 
         # Try native chat template first
         if hasattr(self.tokenizer, "apply_chat_template"):

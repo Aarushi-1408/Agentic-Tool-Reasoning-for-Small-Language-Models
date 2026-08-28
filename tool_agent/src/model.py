@@ -156,6 +156,22 @@ class HuggingFaceModel(ModelInterface):
                 trust_remote_code=True,
             )
 
+    def parameters(self):
+        return self.model.parameters() if hasattr(self, "model") and self.model is not None else []
+
+    def named_modules(self):
+        return self.model.named_modules() if hasattr(self, "model") and self.model is not None else []
+
+    def train(self, mode: bool = True):
+        if hasattr(self, "model") and self.model is not None:
+            self.model.train(mode)
+        return self
+
+    def eval(self):
+        if hasattr(self, "model") and self.model is not None:
+            self.model.eval()
+        return self
+
     def _build_prompt(
         self,
         messages: List[Dict[str, Any]],

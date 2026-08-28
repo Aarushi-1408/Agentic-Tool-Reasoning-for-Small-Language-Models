@@ -62,8 +62,9 @@ class GRPOTrainer:
         input_ids = torch.tensor([token_data["input_ids"]], device=self.device)
         labels = torch.tensor([token_data["labels"]], device=self.device)
 
-        # Forward pass
-        outputs = model(input_ids=input_ids, labels=labels)
+        # Forward pass on underlying PyTorch CausalLM model
+        raw_model = getattr(model, "model", model)
+        outputs = raw_model(input_ids=input_ids, labels=labels)
         loss = outputs.loss
         return loss, torch.tensor(0.01, device=self.device)
 
@@ -97,8 +98,10 @@ class GRPOTrainer:
                     total_loss += loss.item()
 
         if self.optimizer is not None:
-            torch.nn.utils.clip_grad_norm_([p for p in self.model.parameters() if p.requires_grad], max_norm=1.0)
-            self.optimizer.step()
+            params = [p for p in self.model.parameters() if p.requires_grad]
+            if params:
+                torch.nn.utils.clip_grad_norm_(params, max_norm=1.0)
+                self.optimizer.step()
 
         mean_reward = sum(total_rewards) / len(total_rewards) if total_rewards else 0.0
         mean_adv = sum(advantages) / len(advantages) if advantages else 0.0
@@ -119,8 +122,12 @@ class GRPOTrainer:
         os.makedirs(ckpt_dir, exist_ok=True)
 
         if self.model is not None:
-            if hasattr(self.model, "save_pretrained"):
+            save_target = getattr(self.model, "model", self.model)
+            if hasattr(save_target, "save_pretrained"):
+                save_target.save_pretrained(ckpt_dir)
+            elif hasattr(self.model, "save_pretrained"):
                 self.model.save_pretrained(ckpt_dir)
+                
             if self.tokenizer is not None and hasattr(self.tokenizer, "save_pretrained"):
                 self.tokenizer.save_pretrained(ckpt_dir)
 

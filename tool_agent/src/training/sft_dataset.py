@@ -117,6 +117,10 @@ def format_example_tokens(
         input_ids = input_ids[:max_seq_length]
         labels = labels[:max_seq_length]
 
+    # Ensure at least one label token is non--100 to prevent CausalLM loss calculation failure
+    if labels and all(lbl == -100 for lbl in labels):
+        labels[-1] = input_ids[-1]
+
     attention_mask = [1] * len(input_ids)
 
     return {

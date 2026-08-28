@@ -56,6 +56,7 @@ class HuggingFaceModel(ModelInterface):
         max_new_tokens: int = 1024,
         temperature: float = 0.0,
         use_system_prompt: bool = False,
+        custom_system_prompt: Optional[str] = None,
     ):
         try:
             import os

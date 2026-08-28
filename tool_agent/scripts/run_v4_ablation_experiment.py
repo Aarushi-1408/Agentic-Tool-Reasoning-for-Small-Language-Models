@@ -97,8 +97,8 @@ def run_condition(
         model = HuggingFaceModel(
             model_name=model_name,
             use_system_prompt=True,
-            custom_system_prompt=system_prompt_text,
         )
+        model.custom_system_prompt = system_prompt_text
 
     harness = AgentHarness(model=model, tool_registry=registry, max_steps=10)
     evaluator = Evaluator()

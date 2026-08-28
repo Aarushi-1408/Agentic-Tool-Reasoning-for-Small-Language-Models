@@ -190,6 +190,10 @@ class DataCollatorForSFT:
             padded_attention_mask = attention_mask + [0] * remainder
             padded_labels = labels + [-100] * remainder
 
+            # Collator safety check: guarantee at least one unmasked label token per batch item
+            if padded_labels and all(lbl == -100 for lbl in padded_labels):
+                padded_labels[0] = padded_input_ids[0]
+
             batch_input_ids.append(padded_input_ids)
             batch_attention_mask.append(padded_attention_mask)
             batch_labels.append(padded_labels)

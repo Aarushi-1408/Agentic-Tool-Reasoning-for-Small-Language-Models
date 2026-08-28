@@ -317,6 +317,7 @@ def main():
         "seed": args.seed,
         "bf16": use_bf16,
         "fp16": use_fp16,
+        "gradient_checkpointing": True,
         "report_to": "none",
     }
 

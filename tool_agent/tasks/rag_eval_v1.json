@@ -1,0 +1,352 @@
+[
+  {
+    "task_id": "rag_eval_01",
+    "category": "no_tool",
+    "prompt": "What is the boiling point of water at sea level?",
+    "expected_answer": "100 degrees Celsius",
+    "requires_tool": false
+  },
+  {
+    "task_id": "rag_eval_02",
+    "category": "calculator",
+    "prompt": "What is 345 multiplied by 67?",
+    "expected_answer": "23115",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_03",
+    "category": "bm25_search",
+    "prompt": "Find documents with the exact phrase 'speculative decoding speedup'.",
+    "expected_answer": "doc_101",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_04",
+    "category": "dense_vector_search",
+    "prompt": "Find conceptual research on state space models for long context.",
+    "expected_answer": "vec_doc_201",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_05",
+    "category": "hybrid_search",
+    "prompt": "Find papers matching exact keyword 'Mamba-2' and conceptual relevance.",
+    "expected_answer": "hyb_doc_301",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_06",
+    "category": "reranker",
+    "prompt": "Rerank candidate search results for query 'preference optimization'.",
+    "expected_answer": "reranked_doc_01",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_07",
+    "category": "multi_query_retrieval",
+    "prompt": "Search across 3 query formulations for LLM memory footprint reduction.",
+    "expected_answer": "mq_doc_401",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_08",
+    "category": "metadata_filtered_search",
+    "prompt": "Find 2024 AI papers by author 'Vaswani'.",
+    "expected_answer": "meta_doc_501",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_09",
+    "category": "parent_document_retrieval",
+    "prompt": "Retrieve full parent document for chunk ID 'vec_doc_201'.",
+    "expected_answer": "parent_vec_doc_201",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_10",
+    "category": "multi_step",
+    "prompt": "Retrieve documents on 'FlashAttention-3', rerank results, and calculate section count * 50.",
+    "expected_answer": "calculated_metric_400",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_11",
+    "category": "no_tool",
+    "prompt": "What is the boiling point of water at sea level? (Evaluation Task variant #11)",
+    "expected_answer": "100 degrees Celsius",
+    "requires_tool": false
+  },
+  {
+    "task_id": "rag_eval_12",
+    "category": "calculator",
+    "prompt": "What is 345 multiplied by 67? (Evaluation Task variant #12)",
+    "expected_answer": "23115",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_13",
+    "category": "bm25_search",
+    "prompt": "Find documents with the exact phrase 'speculative decoding speedup'. (Evaluation Task variant #13)",
+    "expected_answer": "doc_101",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_14",
+    "category": "dense_vector_search",
+    "prompt": "Find conceptual research on state space models for long context. (Evaluation Task variant #14)",
+    "expected_answer": "vec_doc_201",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_15",
+    "category": "hybrid_search",
+    "prompt": "Find papers matching exact keyword 'Mamba-2' and conceptual relevance. (Evaluation Task variant #15)",
+    "expected_answer": "hyb_doc_301",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_16",
+    "category": "reranker",
+    "prompt": "Rerank candidate search results for query 'preference optimization'. (Evaluation Task variant #16)",
+    "expected_answer": "reranked_doc_01",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_17",
+    "category": "multi_query_retrieval",
+    "prompt": "Search across 3 query formulations for LLM memory footprint reduction. (Evaluation Task variant #17)",
+    "expected_answer": "mq_doc_401",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_18",
+    "category": "metadata_filtered_search",
+    "prompt": "Find 2024 AI papers by author 'Vaswani'. (Evaluation Task variant #18)",
+    "expected_answer": "meta_doc_501",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_19",
+    "category": "parent_document_retrieval",
+    "prompt": "Retrieve full parent document for chunk ID 'vec_doc_201'. (Evaluation Task variant #19)",
+    "expected_answer": "parent_vec_doc_201",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_20",
+    "category": "multi_step",
+    "prompt": "Retrieve documents on 'FlashAttention-3', rerank results, and calculate section count * 50. (Evaluation Task variant #20)",
+    "expected_answer": "calculated_metric_400",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_21",
+    "category": "no_tool",
+    "prompt": "What is the boiling point of water at sea level? (Evaluation Task variant #21)",
+    "expected_answer": "100 degrees Celsius",
+    "requires_tool": false
+  },
+  {
+    "task_id": "rag_eval_22",
+    "category": "calculator",
+    "prompt": "What is 345 multiplied by 67? (Evaluation Task variant #22)",
+    "expected_answer": "23115",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_23",
+    "category": "bm25_search",
+    "prompt": "Find documents with the exact phrase 'speculative decoding speedup'. (Evaluation Task variant #23)",
+    "expected_answer": "doc_101",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_24",
+    "category": "dense_vector_search",
+    "prompt": "Find conceptual research on state space models for long context. (Evaluation Task variant #24)",
+    "expected_answer": "vec_doc_201",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_25",
+    "category": "hybrid_search",
+    "prompt": "Find papers matching exact keyword 'Mamba-2' and conceptual relevance. (Evaluation Task variant #25)",
+    "expected_answer": "hyb_doc_301",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_26",
+    "category": "reranker",
+    "prompt": "Rerank candidate search results for query 'preference optimization'. (Evaluation Task variant #26)",
+    "expected_answer": "reranked_doc_01",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_27",
+    "category": "multi_query_retrieval",
+    "prompt": "Search across 3 query formulations for LLM memory footprint reduction. (Evaluation Task variant #27)",
+    "expected_answer": "mq_doc_401",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_28",
+    "category": "metadata_filtered_search",
+    "prompt": "Find 2024 AI papers by author 'Vaswani'. (Evaluation Task variant #28)",
+    "expected_answer": "meta_doc_501",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_29",
+    "category": "parent_document_retrieval",
+    "prompt": "Retrieve full parent document for chunk ID 'vec_doc_201'. (Evaluation Task variant #29)",
+    "expected_answer": "parent_vec_doc_201",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_30",
+    "category": "multi_step",
+    "prompt": "Retrieve documents on 'FlashAttention-3', rerank results, and calculate section count * 50. (Evaluation Task variant #30)",
+    "expected_answer": "calculated_metric_400",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_31",
+    "category": "no_tool",
+    "prompt": "What is the boiling point of water at sea level? (Evaluation Task variant #31)",
+    "expected_answer": "100 degrees Celsius",
+    "requires_tool": false
+  },
+  {
+    "task_id": "rag_eval_32",
+    "category": "calculator",
+    "prompt": "What is 345 multiplied by 67? (Evaluation Task variant #32)",
+    "expected_answer": "23115",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_33",
+    "category": "bm25_search",
+    "prompt": "Find documents with the exact phrase 'speculative decoding speedup'. (Evaluation Task variant #33)",
+    "expected_answer": "doc_101",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_34",
+    "category": "dense_vector_search",
+    "prompt": "Find conceptual research on state space models for long context. (Evaluation Task variant #34)",
+    "expected_answer": "vec_doc_201",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_35",
+    "category": "hybrid_search",
+    "prompt": "Find papers matching exact keyword 'Mamba-2' and conceptual relevance. (Evaluation Task variant #35)",
+    "expected_answer": "hyb_doc_301",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_36",
+    "category": "reranker",
+    "prompt": "Rerank candidate search results for query 'preference optimization'. (Evaluation Task variant #36)",
+    "expected_answer": "reranked_doc_01",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_37",
+    "category": "multi_query_retrieval",
+    "prompt": "Search across 3 query formulations for LLM memory footprint reduction. (Evaluation Task variant #37)",
+    "expected_answer": "mq_doc_401",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_38",
+    "category": "metadata_filtered_search",
+    "prompt": "Find 2024 AI papers by author 'Vaswani'. (Evaluation Task variant #38)",
+    "expected_answer": "meta_doc_501",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_39",
+    "category": "parent_document_retrieval",
+    "prompt": "Retrieve full parent document for chunk ID 'vec_doc_201'. (Evaluation Task variant #39)",
+    "expected_answer": "parent_vec_doc_201",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_40",
+    "category": "multi_step",
+    "prompt": "Retrieve documents on 'FlashAttention-3', rerank results, and calculate section count * 50. (Evaluation Task variant #40)",
+    "expected_answer": "calculated_metric_400",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_41",
+    "category": "no_tool",
+    "prompt": "What is the boiling point of water at sea level? (Evaluation Task variant #41)",
+    "expected_answer": "100 degrees Celsius",
+    "requires_tool": false
+  },
+  {
+    "task_id": "rag_eval_42",
+    "category": "calculator",
+    "prompt": "What is 345 multiplied by 67? (Evaluation Task variant #42)",
+    "expected_answer": "23115",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_43",
+    "category": "bm25_search",
+    "prompt": "Find documents with the exact phrase 'speculative decoding speedup'. (Evaluation Task variant #43)",
+    "expected_answer": "doc_101",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_44",
+    "category": "dense_vector_search",
+    "prompt": "Find conceptual research on state space models for long context. (Evaluation Task variant #44)",
+    "expected_answer": "vec_doc_201",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_45",
+    "category": "hybrid_search",
+    "prompt": "Find papers matching exact keyword 'Mamba-2' and conceptual relevance. (Evaluation Task variant #45)",
+    "expected_answer": "hyb_doc_301",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_46",
+    "category": "reranker",
+    "prompt": "Rerank candidate search results for query 'preference optimization'. (Evaluation Task variant #46)",
+    "expected_answer": "reranked_doc_01",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_47",
+    "category": "multi_query_retrieval",
+    "prompt": "Search across 3 query formulations for LLM memory footprint reduction. (Evaluation Task variant #47)",
+    "expected_answer": "mq_doc_401",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_48",
+    "category": "metadata_filtered_search",
+    "prompt": "Find 2024 AI papers by author 'Vaswani'. (Evaluation Task variant #48)",
+    "expected_answer": "meta_doc_501",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_49",
+    "category": "parent_document_retrieval",
+    "prompt": "Retrieve full parent document for chunk ID 'vec_doc_201'. (Evaluation Task variant #49)",
+    "expected_answer": "parent_vec_doc_201",
+    "requires_tool": true
+  },
+  {
+    "task_id": "rag_eval_50",
+    "category": "multi_step",
+    "prompt": "Retrieve documents on 'FlashAttention-3', rerank results, and calculate section count * 50. (Evaluation Task variant #50)",
+    "expected_answer": "calculated_metric_400",
+    "requires_tool": true
+  }
+]

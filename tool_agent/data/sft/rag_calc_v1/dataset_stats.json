@@ -1,0 +1,33 @@
+{
+  "total_trajectories": 3000,
+  "train_count": 2700,
+  "validation_count": 300,
+  "pass_rate": 1.0,
+  "duplicate_rate": 0.0,
+  "category_counts": {
+    "rag_single_tool": 900,
+    "rag_multi_tool": 600,
+    "no_tool": 600,
+    "calculator": 600,
+    "hard_negatives": 150,
+    "error_recovery": 150
+  },
+  "tool_counts": {
+    "hybrid_search": 384,
+    "bm25_search": 310,
+    "calculator": 952,
+    "metadata_filtered_search": 310,
+    "reranker": 300,
+    "multi_query_retrieval": 310,
+    "dense_vector_search": 410,
+    "parent_document_retrieval": 274
+  },
+  "metrics": {
+    "no_tool_percentage": 20.0,
+    "calculator_percentage": 20.0,
+    "rag_single_percentage": 30.0,
+    "rag_multi_percentage": 20.0,
+    "error_recovery_percentage": 5.0,
+    "hard_negatives_percentage": 5.0
+  }
+}
